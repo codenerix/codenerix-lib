@@ -29,7 +29,7 @@ from inspect import currentframe
 
 from .colors import colors
 
-__version__ = "2018110100"
+__version__ = "2019050900"
 
 __all__ = ['Debugger', 'lineno', '__FILE__', '__LINE__']
 
@@ -211,16 +211,16 @@ class Debugger(object):
         filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
         if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
             filename = filename[2:]
-        self.warningerror(msg, header, 'WARNING', 'yellow', tail, line=line, filename=filename)
+        self.warningerror(msg, header, 'WARNING', 'yellow', tail, line=line, filename=filename, kind="warning")
 
     def error(self, msg, header=True, tail=True):
         line = currentframe().f_back.f_lineno
         filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
         if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
             filename = filename[2:]
-        self.warningerror(msg, header, 'ERROR', 'red', tail, line=line, filename=filename)
+        self.warningerror(msg, header, 'ERROR', 'red', tail, line=line, filename=filename, kind="error")
 
-    def warningerror(self, msg, header, prefix, color, tail, line=None, filename=None):
+    def warningerror(self, msg, header, prefix, color, tail, line=None, filename=None, kind=None):
 
         # Retrieve the name of the class
         clname = self.__class__.__name__
@@ -239,45 +239,47 @@ class Debugger(object):
 
                 # Get file output handler and indebug list
                 (handler, indebug) = self.__indebug[name]
-                if type(handler) == str:
-                    # Open handler buffer
-                    handlerbuf = open(handler, "a")
-                else:
-                    handlerbuf = handler
 
-                # Get color
-                if name != 'screen':
-                    color = None
-                color_ini = self.color(color)
-                color_end = self.color('close')
-
-                # Build the message
-                message = color_ini
-                if header:
-                    # Set line head name
-                    if self.__inname:
-                        headname = self.__inname
+                if "-*{}".format(kind) not in indebug:
+                    if type(handler) == str:
+                        # Open handler buffer
+                        handlerbuf = open(handler, "a")
                     else:
-                        headname = clname
+                        handlerbuf = handler
 
-                    now = datetime.fromtimestamp(time())
-                    message += "\n%s - %02d/%02d/%d %02d:%02d:%02d " % (prefix, now.day, now.month, now.year, now.hour, now.minute, now.second)
-                    if filename or line:
-                        message += "{}:{}: ".format(filename, line)
-                    message += "%-15s - %s" % (headname, tabular)
-                if msg:
-                    try:
-                        message += str(msg)
-                    except UnicodeEncodeError:
-                        message += str(msg.encode('ascii', 'ignore'))
-                message += color_end
-                if tail:
-                    message += '\n'
+                    # Get color
+                    if name != 'screen':
+                        color = None
+                    color_ini = self.color(color)
+                    color_end = self.color('close')
 
-                # Print it on the buffer handler
-                handlerbuf.write(message)
-                handlerbuf.flush()
+                    # Build the message
+                    message = color_ini
+                    if header:
+                        # Set line head name
+                        if self.__inname:
+                            headname = self.__inname
+                        else:
+                            headname = clname
 
-                # Autoclose handler when done
-                if type(handler) == str:
-                    handlerbuf.close()
+                        now = datetime.fromtimestamp(time())
+                        message += "\n%s - %02d/%02d/%d %02d:%02d:%02d " % (prefix, now.day, now.month, now.year, now.hour, now.minute, now.second)
+                        if filename or line:
+                            message += "{}:{}: ".format(filename, line)
+                        message += "%-15s - %s" % (headname, tabular)
+                    if msg:
+                        try:
+                            message += str(msg)
+                        except UnicodeEncodeError:
+                            message += str(msg.encode('ascii', 'ignore'))
+                    message += color_end
+                    if tail:
+                        message += '\n'
+
+                    # Print it on the buffer handler
+                    handlerbuf.write(message)
+                    handlerbuf.flush()
+
+                    # Autoclose handler when done
+                    if type(handler) == str:
+                        handlerbuf.close()
