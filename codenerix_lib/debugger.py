@@ -29,7 +29,7 @@ from inspect import currentframe
 
 from .colors import colors
 
-__version__ = "2019050900"
+__version__ = "2019050901"
 
 __all__ = ['Debugger', 'lineno', '__FILE__', '__LINE__']
 
@@ -82,7 +82,13 @@ class Debugger(object):
                     if debug['deepness']:
                         idebug['deepness'] -= 1
                     else:
-                        idebug = {}
+                        for key in idebug:
+                            if key not in ['tabular', 'deepness']:
+                                newlist = []
+                                for element in idebug[key][1]:
+                                    if element in ['-*error', '-*warning']:
+                                        newlist.append(element)
+                                idebug[key][1] = newlist
 
                 # Save internal debugger
                 self.__indebug = idebug
