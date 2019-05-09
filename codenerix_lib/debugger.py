@@ -29,7 +29,7 @@ from inspect import currentframe
 
 from .colors import colors
 
-__version__ = "2019050901"
+__version__ = "2019050902"
 
 __all__ = ['Debugger', 'lineno', '__FILE__', '__LINE__']
 
@@ -119,6 +119,9 @@ class Debugger(object):
 
     def debug(self, msg=None, header=None, color=None, tail=None, head=None, footer=None, origin=False):
 
+        # Save original color
+        original_color = color
+
         # If origin has been requested
         if origin or getattr(self, 'origin', False):
             origin = True
@@ -155,7 +158,9 @@ class Debugger(object):
             if name not in ['deepness', 'tabular']:
 
                 # Get color
-                if name != 'screen' and name[-1] != '*':
+                if name == 'screen' or name[-1] == '*':
+                    color = original_color
+                else:
                     color = None
                 color_ini = self.color(color)
                 color_end = self.color('close')
@@ -254,7 +259,9 @@ class Debugger(object):
                         handlerbuf = handler
 
                     # Get color
-                    if name != 'screen' and name[-1] != '*':
+                    if name == 'screen' or name[-1] == '*':
+                        color = original_color
+                    else:
                         color = None
                     color_ini = self.color(color)
                     color_end = self.color('close')
