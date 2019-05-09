@@ -155,7 +155,7 @@ class Debugger(object):
             if name not in ['deepness', 'tabular']:
 
                 # Get color
-                if name != 'screen' or not len(name) or name[-1] != '*':
+                if name != 'screen' and name[-1] != '*':
                     color = None
                 color_ini = self.color(color)
                 color_end = self.color('close')
@@ -254,7 +254,7 @@ class Debugger(object):
                         handlerbuf = handler
 
                     # Get color
-                    if name != 'screen' or not len(name) or name[-1] != '*':
+                    if name != 'screen' and name[-1] != '*':
                         color = None
                     color_ini = self.color(color)
                     color_end = self.color('close')
