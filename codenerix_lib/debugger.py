@@ -29,7 +29,7 @@ from inspect import currentframe
 
 from .colors import colors
 
-__version__ = "2019051000"
+__version__ = "2019051003"
 
 __all__ = ['Debugger', 'lineno', '__FILE__', '__LINE__']
 
@@ -62,6 +62,8 @@ class Debugger(object):
 
     __indebug = {}
     __inname = None
+
+    KINDS = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'error']
 
     def __autoconfig(self):
         # Define debug configuration
@@ -119,9 +121,6 @@ class Debugger(object):
 
     def debug(self, msg=None, header=None, color=None, tail=None, head=None, footer=None, origin=False, kind=""):
 
-        # Save original color
-        original_color = color
-
         # If origin has been requested
         if origin or getattr(self, 'origin', False):
             origin = True
@@ -159,11 +158,11 @@ class Debugger(object):
 
                 # Get color
                 if name == 'screen' or name[-1] == '*':
-                    color = original_color
+                    color_ini = self.color(color)
+                    color_end = self.color('close')
                 else:
-                    color = None
-                color_ini = self.color(color)
-                color_end = self.color('close')
+                    color_ini = self.color(None)
+                    color_end = color_ini
 
                 # Get file output handler and indebug list
                 (handler, indebug) = self.__indebug[name]
@@ -280,11 +279,11 @@ class Debugger(object):
 
                     # Get color
                     if name == 'screen' or name[-1] == '*':
-                        color = original_color
+                        color_ini = self.color(color)
+                        color_end = self.color('close')
                     else:
-                        color = None
-                    color_ini = self.color(color)
-                    color_end = self.color('close')
+                        color_ini = self.color(None)
+                        color_end = color_ini
 
                     # Build the message
                     message = color_ini
