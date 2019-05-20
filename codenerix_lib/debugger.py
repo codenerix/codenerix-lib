@@ -303,7 +303,10 @@ class Debugger(object):
                         try:
                             message += str(msg)
                         except UnicodeEncodeError:
-                            message += str(msg.encode('ascii', 'ignore'))
+                            try:
+                                message += str(msg.encode('ascii', 'ignore'))
+                            except Exception:
+                                message += "*** Message is in Binary format, I tried to convert to ASCII ignoring encoding errors but it failed as well. ***"
                     message += color_end
                     if tail:
                         message += '\n'
