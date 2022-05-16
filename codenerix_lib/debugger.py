@@ -29,7 +29,7 @@ from inspect import currentframe
 
 from .colors import colors
 
-__version__ = "2019051003"
+__version__ = "2019052401"
 
 __all__ = ['Debugger', 'lineno', '__FILE__', '__LINE__']
 
@@ -218,6 +218,90 @@ class Debugger(object):
             # Say to the caller we shouldn't output anything
             return False
 
+    def primary(self, msg, header=True, tail=True, show_line_info=False):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "PRIMARY", "blue", "primary", line, filename, header, tail)
+
+    def secondary(self, msg, header=True, tail=True, show_line_info=False):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "SECONDARY", "purple", "secondary", line, filename, header, tail)
+
+    def success(self, msg, header=True, tail=True, show_line_info=False):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "SUCCESS", "green", "success", line, filename, header, tail)
+
+    def danger(self, msg, header=True, tail=True, show_line_info=False):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "DANGER", "simplered", "danger", line, filename, header, tail)
+
+    def warning(self, msg, header=True, tail=True, show_line_info=True):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "WARNING", "yellow", "warning", line, filename, header, tail)
+
+    def info(self, msg, header=True, tail=True, show_line_info=False):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "INFO", "cyan", "info", line, filename, header, tail)
+
+    def error(self, msg, header=True, tail=True, show_line_info=True):
+        if show_line_info:
+            line = currentframe().f_back.f_lineno
+            filename = currentframe().f_back.f_code.co_filename.replace(getcwd(), ".")
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
+                filename = filename[2:]
+        else:
+            line = None
+            filename = None
+
+        self.__warningerror(msg, "ERROR", "red", "error", line, filename, header, tail)
+
     def debug_with_style(self, msg, title, color, kind, show_line_info, header=True, tail=True):
         if show_line_info:
             line = currentframe().f_back.f_lineno
@@ -227,31 +311,10 @@ class Debugger(object):
         else:
             line = None
             filename = None
-        self.warningerror(msg, header, title, color, tail, line=line, filename=filename, kind=kind)
 
-    def primary(self, msg, header=True, tail=True, show_line_info=False):
-        self.debug_with_style(msg, "PRIMARY", "blue", "primary", show_line_info, header=header, tail=tail)
+        self.__warningerror(msg, title, color, kind, line, filename, header, tail)
 
-    def secondary(self, msg, header=True, tail=True, show_line_info=False):
-        self.debug_with_style(msg, "SECONDARY", "purple", "secondary", show_line_info, header=header, tail=tail)
-
-    def success(self, msg, header=True, tail=True, show_line_info=False):
-        self.debug_with_style(msg, "SUCCESS", "green", "success", show_line_info, header=header, tail=tail)
-
-    def danger(self, msg, header=True, tail=True, show_line_info=False):
-        self.debug_with_style(msg, "DANGER", "simplered", "danger", show_line_info, header=header, tail=tail)
-
-    def warning(self, msg, header=True, tail=True, show_line_info=True):
-        self.debug_with_style(msg, "WARNING", "yellow", "warning", show_line_info, header=header, tail=tail)
-
-    def info(self, msg, header=True, tail=True, show_line_info=False):
-        self.debug_with_style(msg, "INFO", "cyan", "info", show_line_info, header=header, tail=tail)
-
-    def error(self, msg, header=True, tail=True, show_line_info=True):
-        self.debug_with_style(msg, "ERROR", "red", "error", show_line_info, header=header, tail=tail)
-
-    def warningerror(self, msg, header, prefix, color, tail, line=None, filename=None, kind=None):
-
+    def __warningerror(self, msg, prefix, color, kind, line, filename, header, tail):
         # Retrieve the name of the class
         clname = self.__class__.__name__
 
