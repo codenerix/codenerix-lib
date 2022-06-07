@@ -53,7 +53,7 @@ class AESCipher(object):
         if not isinstance(raw, bytes):
             raw = raw.encode()
 
-        if (b64encoded):
+        if b64encoded:
             return base64.b64encode(iv + cipher.encrypt(raw))
         else:
             return iv + cipher.encrypt(raw)
@@ -61,14 +61,14 @@ class AESCipher(object):
     def decrypt(self, enc, key, b64encoded=True):
         if b64encoded:
             enc = base64.b64decode(enc)
-        iv = enc[:AES.block_size]
+        iv = enc[: AES.block_size]
         if not isinstance(key, bytes):
             key = key.encode()
         hashkey = hashlib.sha256(key).digest()
         cipher = AES.new(hashkey, AES.MODE_CBC, iv)
-        unpad = self._unpad(cipher.decrypt(enc[AES.block_size:]))
+        unpad = self._unpad(cipher.decrypt(enc[AES.block_size :]))
         if not isinstance(unpad, bytes):
-            unpad = unpad.decode('utf-8')
+            unpad = unpad.decode("utf-8")
         return unpad
 
     def _pad(self, s):
@@ -79,4 +79,4 @@ class AESCipher(object):
 
     @staticmethod
     def _unpad(s):
-        return s[:-ord(s[len(s) - 1:])]
+        return s[: -ord(s[len(s) - 1 :])]

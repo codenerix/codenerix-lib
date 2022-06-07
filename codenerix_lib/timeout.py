@@ -18,11 +18,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 Timeout exception definition and timeout function to allow the user to call
 functions under specific timeout. The function will raise an exception when
 timeout is reached if the called function didn't finish execution before
-'''
+"""
 
 __version__ = "2017112900"
 
@@ -36,15 +36,15 @@ __all__ = ["TimedOutException", "timeout", "timeout2"]
 
 
 class TimedOutException(Exception):
-    '''
+    """
     Timeout exception definition
-    '''
+    """
 
     def __init__(self, value="Timed Out"):
-        '''
+        """
         Parameters:
         - `value`: text to raise in the exception
-        '''
+        """
         self.value = value
 
     def __str__(self):
@@ -52,7 +52,7 @@ class TimedOutException(Exception):
 
 
 def timeout(f, timeout, *args, **kwargs):
-    '''
+    """
     Function that controls the timeout
 
     Parameters:
@@ -66,7 +66,7 @@ def timeout(f, timeout, *args, **kwargs):
     - `IOError`: parameter error
     - `TimedOutException`: when timeout reach to the limit and the function is
        still executing
-    '''
+    """
 
     # Control that timeout can not be zero or negative
     if timeout <= 0:
@@ -96,7 +96,6 @@ def timeout(f, timeout, *args, **kwargs):
 
 
 class ThreadedCMD(threading.Thread):
-
     def __init__(self, result, f, args=(), kwargs={}):
         # Initialice thread
         super(ThreadedCMD, self).__init__()
@@ -136,8 +135,7 @@ def terminate_thread(thread):
         return
 
     exc = ctypes.py_object(SystemExit)
-    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
-        ctypes.c_long(thread.ident), exc)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread.ident), exc)
     if res == 0:
         raise ValueError("nonexistent thread id")
     elif res > 1:
@@ -148,7 +146,7 @@ def terminate_thread(thread):
 
 
 def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
-    '''
+    """
     Function that controls the timeout of another function using only threads
 
     Parameters:
@@ -162,7 +160,7 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
     - `IOError`: parameter error
     - `TimedOutException`: when timeout reach to the limit and the function is
        still executing
-    '''
+    """
 
     # Set startup
     startup = time.time()
