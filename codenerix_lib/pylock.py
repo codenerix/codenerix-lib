@@ -2,7 +2,7 @@
 #
 # django-codenerix
 #
-# Copyright 2017 Centrologic Computational Logistic Center S.L.
+# Codenerix GNU
 #
 # Project URL : http://www.codenerix.com
 #
@@ -18,9 +18,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 Library to handle lockers over files
-'''
+"""
 
 __version__ = "2015061200"
 
@@ -29,95 +29,122 @@ import fcntl
 import unittest
 import tempfile
 
-__all__ = [ "pylock" , "AlreadyLocked" ]
+__all__ = ["pylock", "AlreadyLocked"]
+
 
 class pylock:
-    '''
+    """
     Function to control locking flags over a file
-    '''
+    """
 
-    def __init__(self, lockfile, locktype):
-        '''
+    def __init__(self, lockfile, locktype, verbose=False):
+        """
         Parameters:
         - `lockfile`: name of the file to check/apply the locking.
         - `locktype`: possible values are:
                 wait: on a call to lock() function, the system will wait to get the locker
                 lock: on a call to lock() function, if locked the system will raise an AlreadyLocked exception
-        '''
+        - `verbose`:  enable verbose mode
+        """
 
         # Save config
         self.__lockfile = lockfile
         self.__locktype = locktype
         self.__fd = None
+        self.__verbose = verbose
+
+        # Show header if verbose
+        if self.__verbose:
+            print(
+                '{} - VERBOSE MODE ENABLED: lockfile="{}" - locktype="{}"'.format(
+                    self.__verbose, self.__lockfile, self.__locktype
+                )
+            )
 
         # Check file exists and create it if it does not
         if not os.path.exists(lockfile):
-            file = open(lockfile, 'w')
+            if self.__verbose:
+                print(
+                    "{} - Lockfile not found, creating a new one!".format(
+                        self.__verbose
+                    )
+                )
+            file = open(lockfile, "w")
             file.close()
 
         # Check locktype
-        if locktype not in ['wait','lock']:
+        if locktype not in ["wait", "lock"]:
             raise TypeError("Locking type unkown")
 
     def __del__(self):
-        '''
+        """
         when dying make sure the lock become free
-        '''
+        """
         # If file was open, close it and delete it!
         if self.__fd:
+            if self.__verbose:
+                print("{} - Cloing FD".format(self.__verbose))
             self.__fd.close()
+            self.__fd = None
 
     def lock(self):
-        '''
+        """
         Try to get locked the file
         - the function will wait until the file is unlocked if 'wait' was defined as locktype
         - the funciton will raise AlreadyLocked exception if 'lock' was defined as locktype
-        '''
+        """
 
         # Open file
-        self.__fd = open(self.__lockfile, "w")
+        if not self.__fd:
+            if self.__verbose:
+                print("{} - Opening FD".format(self.__verbose))
+            self.__fd = open(self.__lockfile, "wb")
 
-        # Get it locked
         if self.__locktype == "wait":
             # Try to get it locked until ready
+            if self.__verbose:
+                print("{} - Wait lock!".format(self.__verbose))
             fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX)
         elif self.__locktype == "lock":
             # Try to get the locker if can not raise an exception
+            if self.__verbose:
+                print("{} - Normal lock!".format(self.__verbose))
             try:
-                fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX|fcntl.LOCK_NB)
+                fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             except IOError:
+                if self.__verbose:
+                    print("{} - Already locked!".format(self.__verbose))
                 raise AlreadyLocked("File is already locked")
 
     def free(self):
-        '''
+        """
         Set the locked file free
-        '''
+        """
+
+        if self.__verbose:
+            print("{} - Free lock! (Closing FD)".format(self.__verbose))
 
         # Close file
         self.__fd.close()
-
-        # Delete it
-        try:
-            os.unlink(self.__lockfile)
-        except:
-            pass
-
+        self.__fd = None
 
 
 # Exceptions classes
 class AlreadyLocked(Exception):
-
-    def __init__(self,string):
+    def __init__(self, string):
         self.string = string
 
     def __str__(self):
         return self.string
 
+
 # Testing
 class test_pylock(unittest.TestCase):
-    '''
+    """
     Testing class for pylock
-    '''
+    """
+
+    verbose = False
 
     def setUp(self):
         pass
@@ -127,12 +154,17 @@ class test_pylock(unittest.TestCase):
         f = tempfile.NamedTemporaryFile(delete=False)
         f.close()
 
-        locker1 = pylock(f.name, 'lock')
-        locker1.lock()
+        if self.verbose:
+            locker1 = pylock(f.name, "lock", verbose="1")
+            locker2 = pylock(f.name, "lock", verbose="2")
+        else:
+            locker1 = pylock(f.name, "lock")
+            locker2 = pylock(f.name, "lock")
 
-        locker2 = pylock(f.name, 'lock')
+        locker1.lock()
         self.assertRaises(AlreadyLocked, locker2.lock)
         locker1.free()
+
         locker2.lock()
         self.assertRaises(AlreadyLocked, locker1.lock)
         locker2.free()
@@ -142,5 +174,5 @@ class test_pylock(unittest.TestCase):
 
 
 # Base call
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

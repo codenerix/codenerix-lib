@@ -4,9 +4,10 @@ codenerix-lib
 
 Codenerix LIB is a base module of libraries used bys `CODENERIX <http://www.codenerix.com/>`_ 
 
-.. image:: http://www.codenerix.com/wp-content/uploads/2018/05/codenerix.png
-    :target: http://www.codenerix.com
+.. image:: https://github.com/codenerix/django-codenerix/raw/master/codenerix/static/codenerix/img/codenerix.png
+    :target: https://www.codenerix.com
     :alt: Try our demo with Codenerix Cloud
+
 
 **********
 Quickstart
@@ -23,12 +24,6 @@ Quickstart
 Documentation
 *************
 
-Coming soon... do you help us? `Codenerix <http://www.codenerix.com/>`_
+Coming soon... do you help us?
 
-You can chat with us `here <https://goo.gl/NgpzBh>`_.
-
-*******
-Credits
-*******
-
-This project has been possible thanks to `Centrologic <http://www.centrologic.com/>`_.
+You can get in touch with us `here <https://codenerix.com/contact/>`_.
