@@ -2,7 +2,7 @@
 codenerix-lib
 =============
 
-Codenerix LIB is a base module of libraries used bys `CODENERIX <http://www.codenerix.com/>`_ 
+Codenerix LIB is a base module of libraries used by `CODENERIX <http://www.codenerix.com/>`_ you can visit the project at Github `https://github.com/codenerix/django-codenerix`
 
 .. image:: https://github.com/codenerix/django-codenerix/raw/master/codenerix/static/codenerix/img/codenerix.png
     :target: https://www.codenerix.com
