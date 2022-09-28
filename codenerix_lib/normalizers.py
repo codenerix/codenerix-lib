@@ -50,7 +50,7 @@ def strong_normalizer(
 
     # Remove numbers
     if remove_numbers:
-        string = re.sub(r"\d+", "", string)
+        string = re.sub(r"\d+", " ", string)
 
     # Remove all punctuation except words and space
     if remove_punctuations:
