@@ -3,15 +3,23 @@ import unidecode
 import textnorm
 import nltk
 
-# Download stpwords
-nltk.download("stopwords", quiet=True)
-
 # Import nltk for stopwords
 from nltk.corpus import stopwords
+from nltk import download
+
+try:
+    stop_words = set(stopwords.words("english"))
+except LookupError:
+    nltk.download("stopwords", quiet=True)
+    stop_words = set(stopwords.words("english"))
 
 
 def strong_normalizer(
-    string, remove_numbers=True, remove_punctuations=True, remove_whitespaces=True
+    string,
+    remove_numbers=True,
+    remove_punctuations=True,
+    remove_extraspaces=True,
+    remove_allspaces=False,
 ):
     """
     This is a very string normalizer string that remove almost anything except words
@@ -24,8 +32,10 @@ def strong_normalizer(
         If the algorithm should remove numbers (Default: True)
     remove_punctuations: bool
         If the algorithm should remove punctuations symbols (Default: True)
-    remove_whitespaces: bool
+    remove_extraspaces: bool
         If the algorithm should remove spaces (Default: True)
+    remove_allspaces: bool
+        If the algorithm should remove all spaces (Default: False)
 
     Return
     ------
@@ -33,8 +43,7 @@ def strong_normalizer(
         String already normalized
     """
 
-    # Get stop words
-    stop_words = set(stopwords.words("english"))
+    global stop_words
 
     # Normalize unicode
     string = textnorm.normalize_unicode(string)
@@ -57,7 +66,7 @@ def strong_normalizer(
         string = re.sub(r"[^\w\s]", "", string)
 
     # Remove white spaces
-    if remove_whitespaces:
+    if remove_extraspaces:
         string = string.strip()
 
     # Convert string to list of words
@@ -71,6 +80,10 @@ def strong_normalizer(
 
     # Removing last space
     string = clean_string[:-1]
+
+    # Remove all spaces
+    if remove_allspaces:
+        string = string.replace(" ", "")
 
     # Return result
     return string
