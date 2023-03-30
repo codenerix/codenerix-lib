@@ -21,7 +21,6 @@
 """
 Colors definition
 """
-
 from colorama import init
 
 init()
@@ -71,8 +70,7 @@ def colorize(msg, color=None):
     return result
 
 
-if __name__ == "__main__":
-
+def get_colors():
     # Reorder colors
     keys = []
     for key in colors.keys():
@@ -80,12 +78,20 @@ if __name__ == "__main__":
     keys.sort()
 
     # Show up all colors
+    buffer = ""
     for color in keys:
         # Get the color information
         (simplebit, subcolor) = colors[color[2]]
+        if len(buffer) > 0:
+            buffer += "\n"
         # Show it
-        print(
-            "{0:1d}:{1:02d} - \033[{2:1d};{3:02d}m{4:<14s}\033[1;00m{5:<s}".format(
-                simplebit, subcolor, simplebit, subcolor, color[2], color[2]
-            )
+        buffer += (
+            f"{simplebit:1d}:{subcolor:02d} - "
+            f"\033[{simplebit:1d};{subcolor:02d}m{color[2]:<14s}"
+            f"\033[1;00m{color[2]:<s}"
         )
+    return buffer
+
+
+if __name__ == "__main__":
+    print(get_colors())

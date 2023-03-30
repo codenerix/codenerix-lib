@@ -17,7 +17,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """
 Timeout exception definition and timeout function to allow the user to call
 functions under specific timeout. The function will raise an exception when
@@ -131,11 +130,14 @@ def terminate_thread(thread):
 
     :param thread: a threading.Thread instance
     """
-    if not thread.isAlive():
+    if not thread.is_alive():
         return
 
     exc = ctypes.py_object(SystemExit)
-    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread.ident), exc)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+        ctypes.c_long(thread.ident),
+        exc,
+    )
     if res == 0:
         raise ValueError("nonexistent thread id")
     elif res > 1:
@@ -151,10 +153,13 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
 
     Parameters:
     - `f`: function to process under timeout control
-    - `timeout`: total number of seconds to wait until timeout (not allowed 0 or less)
+    - `timeout`: total number of seconds to wait until timeout (not
+         allowed 0 or less)
     - `quit`: function called with no arguments to request f() to finish
-    - `reactivity`: time that the algorithm will wait between checks (faster means more CPU it will consume)
-    - `args` & `kwargs`: to allow in this function any kind of parameters to be passed to function f
+    - `reactivity`: time that the algorithm will wait between checks (faster
+         means more CPU it will consume)
+    - `args` & `kwargs`: to allow in this function any kind of parameters to
+         be passed to function f
 
     Exceptions:
     - `IOError`: parameter error
@@ -176,7 +181,7 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
     th.start()
 
     # Wait until done
-    while th.isAlive():
+    while th.is_alive():
         diff = time.time() - startup
         if diff > timeout:
             # It has passed too much time, finish this!
@@ -192,7 +197,7 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
     ex = th.exception()
 
     # If the thread is still working and we are here, we must stop it!
-    if th.isAlive():
+    if th.is_alive():
         # Stop the thread
         if quit:
             quit()

@@ -1,6 +1,7 @@
 include MANIFEST.in
 include LICENSE
 include README.rst
+include requirements.txt
 exclude *.pyc
 exclude __pycache__
 exclude .ropeproject

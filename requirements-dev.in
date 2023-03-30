@@ -1,0 +1,11 @@
+pycryptodomex
+colorama
+nltk
+textnorm
+unidecode
+pytest
+pytest-mock
+black
+tox
+pip-tools
+pre-commit

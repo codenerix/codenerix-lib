@@ -18,16 +18,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This library is intended for encrypting as CODENERIX's Cryptography Libraries work, the basis
-# for the library to work are, the KEY is always a SHA256 from your real KEY, the IV vector
-# should be generated automatically on encryption time by the library and must be inserted
-# at the beginning of the encrypted string (which shoul be padded with PKCS7). The full
-# string IV+ENCRYPTED is encoded to Base64. For decrypting the process is the opossite, the
-# raw string is decoded from Base64, the first 16 bytes are taken as the IV and the rest as
-# the encrypted string, the key is hashed with SHA256 and then the encrypted string is decrypted
-# using the IV and the hashed key.
-
-
+# This library is intended for encrypting as CODENERIX's Cryptography
+# Libraries work, the basis for the library to work are, the KEY is always
+# a SHA256 from your real KEY, the IV vector should be generated automatically
+# on encryption time by the library and must be inserted at the beginning
+# of the encrypted string (which shoul be padded with PKCS7). The full
+# string IV+ENCRYPTED is encoded to Base64. For decrypting the process is
+# the opossite, the raw string is decoded from Base64, the first 16 bytes
+# are taken as the IV and the rest as the encrypted string, the key is hashed
+# with SHA256 and then the encrypted string is decrypted using the IV and
+# the hashed key.
 import base64
 import hashlib
 

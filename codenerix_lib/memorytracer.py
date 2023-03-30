@@ -10,9 +10,26 @@ class MemoryTracer(Debugger):
         tracemalloc.clear_traces()
 
     def memtracer_top(
-        self, snapshot=None, key_type="lineno", limit=10, percents=(50, 10)
+        self,
+        snapshot=None,
+        key_type="lineno",
+        limit=10,
+        percents=(50, 10),
+        onscreen=True,
     ):
         top = None
+        answer = {
+            "config": {
+                "key_type": key_type,
+                "limit": limit,
+                "percents": percents,
+            },
+            "top": [],
+            "other": None,
+            "otherkb": None,
+            "total": None,
+            "totalkb": None,
+        }
         if snapshot is None:
             snapshot = tracemalloc.take_snapshot()
 
@@ -20,11 +37,15 @@ class MemoryTracer(Debugger):
             (
                 tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
                 tracemalloc.Filter(False, "<unknown>"),
-            )
+            ),
         )
         top_stats = snapshot.statistics(key_type)
 
-        self.debug("Memory Tracer top {} lines:".format(limit), color="blue")
+        if onscreen:
+            self.debug(
+                "Memory Tracer top {} lines:".format(limit),
+                color="blue",
+            )
         for index, stat in enumerate(top_stats[:limit], 1):
             if index == 1:
                 top = stat.size
@@ -40,26 +61,54 @@ class MemoryTracer(Debugger):
             frame = stat.traceback[0]
             # replace "/path/to/module/file.py" with "module/file.py"
             filename = os.sep.join(frame.filename.split(os.sep)[-2:])
-            self.debug(
-                "#{}: {}:{}: {:.1f} KiB".format(
-                    index, filename, frame.lineno, stat.size / 1024
-                ),
-                color=color,
-            )
+            token = {
+                "index": index,
+                "filename": filename,
+                "linenumber": frame.lineno,
+                "size": stat.size,
+                "sizekb": stat.size / 1024,
+                "line": None,
+            }
+            if onscreen:
+                self.debug(
+                    "#{}: {}:{}: {:.1f} KiB".format(
+                        index,
+                        filename,
+                        frame.lineno,
+                        stat.size / 1024,
+                    ),
+                    color=color,
+                )
+
+            # Save line
             line = linecache.getline(frame.filename, frame.lineno).strip()
             if line:
-                self.debug("    {}".format(line), color="white")
+                token["line"] = line
+                if onscreen:
+                    self.debug("    {}".format(line), color="white")
+
+            answer["top"].append(token)
 
         other = top_stats[limit:]
         if other:
             size = sum(stat.size for stat in other)
-            self.debug(
-                "{} other: {:.1f} KiB".format(len(other), size / 1024), color="purple"
-            )
+            answer["other"] = size
+            answer["otherkb"] = float(size) / 1024.0
+            if onscreen:
+                self.debug(
+                    "{} other: {:.1f} KiB".format(len(other), size / 1024),
+                    color="purple",
+                )
         total = sum(stat.size for stat in top_stats)
-        self.debug(
-            "Total allocated size: {:.1f} KiB".format(total / 1024), color="green"
-        )
+        answer["total"] = total
+        answer["totalkb"] = float(total) / 1024.0
+        if onscreen:
+            self.debug(
+                "Total allocated size: {:.1f} KiB".format(total / 1024),
+                color="green",
+            )
+
+        return answer
 
 
 tracemalloc.start()
