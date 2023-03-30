@@ -17,6 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Prepare system
+      run: make prepare
+
     - name: Create environment
       run: make venv
 

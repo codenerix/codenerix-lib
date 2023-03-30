@@ -10,6 +10,10 @@ test:
 tox:
 	(. ./venv/bin/activate && python -m tox)
 
+.PHONY: prepare
+prepare:
+	sudo apt-get -y install python3-pip python3-virtualenv
+
 venv:
 	test ! -f venv && virtualenv -p python3 venv || true
 	(. ./venv/bin/activate && pip install -r requirements-dev.txt)
