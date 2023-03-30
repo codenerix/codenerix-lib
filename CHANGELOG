@@ -1,0 +1,16 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.0.21] - 2023-03-30
+### Added
+- Tests
+- Type checking
+- Pip-tools to manage dependency versions
+- Tox support for py39, py310 and py311
+- Pre-commit for linting and styling
+- Github actions to verify tests and tox
