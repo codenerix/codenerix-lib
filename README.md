@@ -2,9 +2,9 @@
 
 ![builds and tests](https://github.com/codenerix/codenerix-lib/actions/workflows/build_and_test.yaml/badge.svg?branch=master)
 
-Codenerix LIB is a base module of libraries used by [CODENERIX](http://www.codenerix.com/)_ you can visit the project at [Github Django CODENERIX](https://github.com/codenerix/django-codenerix)
+Codenerix LIB is a base module of libraries used by [CODENERIX](https://www.codenerix.com/). It is a very usefull library for any project and you can use it without [CODENERIX](https://www.codenerix.com). you can visit the project at [GitHub Django CODENERIX](https://github.com/codenerix/django-codenerix)
 
-![CODENERIXd](https://github.com/codenerix/django-codenerix/raw/master/codenerix/static/codenerix/img/codenerix.png)
+![CODENERIX](https://github.com/codenerix/django-codenerix/raw/master/codenerix/static/codenerix/img/codenerix.png)
 
 
 ## Quickstart
