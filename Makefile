@@ -7,9 +7,8 @@ test:
 	(. ./venv/bin/activate && python -m pytest -s -vv tests)
 
 .PHONY: tox
-test:
+tox:
 	(. ./venv/bin/activate && python -m tox)
-
 
 venv:
 	test ! -f venv && virtualenv -p python3 venv || true
