@@ -6,7 +6,7 @@ from setuptools import setup
 
 import codenerix_lib
 
-with open(os.path.join(os.path.dirname(__file__), "README.rst")) as readme:
+with open(os.path.join(os.path.dirname(__file__), "README.md")) as readme:
     README = readme.read()
 
 with pathlib.Path("requirements.txt").open() as requirements_txt:
