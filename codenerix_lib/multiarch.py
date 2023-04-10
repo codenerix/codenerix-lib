@@ -22,7 +22,7 @@ def whatismyarch():
     if march > 0:
         arch = output[march + len('"-march=') :].split('"')[0]
     else:
-        arch = None
+        arch = None  # pragma: no cover
 
     return arch
 
@@ -44,12 +44,12 @@ def multiarch_import(name, sufix=None, using=False):
         # Use it as expected
         try:
             imported = __import__("{}{}".format(name, sufix))
-            if using:
+            if using:  # pragma: no cover
                 d.debug("Using {}{}".format(name, sufix), color="cyan")
         except Exception:
             d.warning(
                 f"I have tried to import the library '{name}' as you "
-                f"requested using sufix '{sufix} but I have failed to "
+                f"requested using sufix '{sufix}' but I have failed to "
                 f"import {name}{sufix}, maybe you have forgotten to install "
                 "the python library, I will try to import the default "
                 "library!",
@@ -62,6 +62,7 @@ def multiarch_import(name, sufix=None, using=False):
         try:
             arch = whatismyarch()
         except Exception as e:
+            arch = None
             d.warning(
                 "I have tried to guess your machine architecture "
                 "using 'whatismyarch()', but the command has failed, do you "
@@ -75,11 +76,11 @@ def multiarch_import(name, sufix=None, using=False):
             # Try to import detected architecture
             try:
                 imported = __import__(f"{name}_{arch}")
-                if using:
+                if using:  # pragma: no cover
                     d.debug(f"Using {name}_{arch}", color="cyan")
             except Exception:
                 d.warning(
-                    "I have guessed with 'whatismyyarch()' that your "
+                    "I have guessed with 'whatismyarch()' that your "
                     f"architecture is '{arch}', but I have failed to "
                     f"import {name}_{arch}, maybe you have forgotten "
                     "to install the python library for your architecture, "
@@ -95,7 +96,7 @@ def multiarch_import(name, sufix=None, using=False):
         # No architecture detected, try to import the base library!
         try:
             imported = __import__(name)
-            if using:
+            if using:  # pragma: no cover
                 d.debug(f"Using {name}", color="cyan")
         except Exception:
             d.debug(

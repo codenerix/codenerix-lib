@@ -3,6 +3,7 @@ from codenerix_lib.memorytracer import MemoryTracer
 
 def test_memorytracer():
     mt = MemoryTracer()
+    mt.memtracer_clean()
     data = mt.memtracer_top(onscreen=False)
     config = data["config"]
     top = data["top"]

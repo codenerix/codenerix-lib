@@ -41,7 +41,7 @@ class MemoryTracer(Debugger):
         )
         top_stats = snapshot.statistics(key_type)
 
-        if onscreen:
+        if onscreen:  # pragma: no cover
             self.debug(
                 "Memory Tracer top {} lines:".format(limit),
                 color="blue",
@@ -69,7 +69,7 @@ class MemoryTracer(Debugger):
                 "sizekb": stat.size / 1024,
                 "line": None,
             }
-            if onscreen:
+            if onscreen:  # pragma: no cover
                 self.debug(
                     "#{}: {}:{}: {:.1f} KiB".format(
                         index,
@@ -84,7 +84,7 @@ class MemoryTracer(Debugger):
             line = linecache.getline(frame.filename, frame.lineno).strip()
             if line:
                 token["line"] = line
-                if onscreen:
+                if onscreen:  # pragma: no cover
                     self.debug("    {}".format(line), color="white")
 
             answer["top"].append(token)
@@ -94,7 +94,7 @@ class MemoryTracer(Debugger):
             size = sum(stat.size for stat in other)
             answer["other"] = size
             answer["otherkb"] = float(size) / 1024.0
-            if onscreen:
+            if onscreen:  # pragma: no cover
                 self.debug(
                     "{} other: {:.1f} KiB".format(len(other), size / 1024),
                     color="purple",
@@ -102,7 +102,7 @@ class MemoryTracer(Debugger):
         total = sum(stat.size for stat in top_stats)
         answer["total"] = total
         answer["totalkb"] = float(total) / 1024.0
-        if onscreen:
+        if onscreen:  # pragma: no cover
             self.debug(
                 "Total allocated size: {:.1f} KiB".format(total / 1024),
                 color="green",

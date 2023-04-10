@@ -53,7 +53,7 @@ class PyLock:  # noqa: N801
         self.__verbose = verbose
 
         # Show header if verbose
-        if self.__verbose:
+        if self.__verbose:  # pragma: no cover
             print(
                 f"{self.__verbose} - VERBOSE MODE ENABLED: "
                 f'lockfile="{self.__lockfile}" - locktype="{self.__locktype}"',
@@ -61,7 +61,7 @@ class PyLock:  # noqa: N801
 
         # Check file exists and create it if it does not
         if not os.path.exists(lockfile):
-            if self.__verbose:
+            if self.__verbose:  # pragma: no cover
                 print(
                     "{} - Lockfile not found, creating a new one!".format(
                         self.__verbose,
@@ -72,7 +72,7 @@ class PyLock:  # noqa: N801
 
         # Check locktype
         if locktype not in ["wait", "lock"]:
-            raise TypeError("Locking type unkown")
+            raise TypeError("Locking type unknown")
 
     def __del__(self):
         """
@@ -80,7 +80,7 @@ class PyLock:  # noqa: N801
         """
         # If file was open, close it and delete it!
         if self.__fd:
-            if self.__verbose:
+            if self.__verbose:  # pragma: no cover
                 print("{} - Cloing FD".format(self.__verbose))
             self.__fd.close()
             self.__fd = None
@@ -96,23 +96,23 @@ class PyLock:  # noqa: N801
 
         # Open file
         if not self.__fd:
-            if self.__verbose:
+            if self.__verbose:  # pragma: no cover
                 print("{} - Opening FD".format(self.__verbose))
             self.__fd = open(self.__lockfile, "wb")
 
-        if self.__locktype == "wait":
+        if self.__locktype == "wait":  # pragma: no cover
             # Try to get it locked until ready
             if self.__verbose:
                 print("{} - Wait lock!".format(self.__verbose))
             fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX)
         elif self.__locktype == "lock":
             # Try to get the locker if can not raise an exception
-            if self.__verbose:
+            if self.__verbose:  # pragma: no cover
                 print("{} - Normal lock!".format(self.__verbose))
             try:
                 fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             except IOError:
-                if self.__verbose:
+                if self.__verbose:  # pragma: no cover
                     print("{} - Already locked!".format(self.__verbose))
                 raise AlreadyLocked("File is already locked")
 
@@ -121,7 +121,7 @@ class PyLock:  # noqa: N801
         Set the locked file free
         """
 
-        if self.__verbose:
+        if self.__verbose:  # pragma: no cover
             print("{} - Free lock! (Closing FD)".format(self.__verbose))
 
         # Close file

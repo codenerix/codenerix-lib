@@ -1944,3 +1944,7 @@ bmFsIHN1Z2llcmUgdW5hIHRyYWR1Y2Npb24gbWVqb3I="""
     test = base64.b64decode(b64test).decode()
     expected = base64.b64decode(b64expected).decode()
     assert strong_normalizer(test) == expected
+    assert strong_normalizer(test, remove_allspaces=True) == expected.replace(
+        " ",
+        "",
+    )

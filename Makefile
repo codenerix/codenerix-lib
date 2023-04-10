@@ -6,6 +6,17 @@ default:
 test:
 	(. ./venv/bin/activate && python -m pytest -s -vv tests)
 
+.PHONY: coverage
+coverage:
+	-### Executing coverage...
+	(. ./venv/bin/activate && coverage run -m pytest tests)
+	make coverage_report
+
+.PHONY: coverage_report
+coverage_report:
+	(. ./venv/bin/activate && coverage html)
+	open htmlcov/index.html 2>/dev/null 1>&2
+
 .PHONY: tox
 tox:
 	(. ./venv/bin/activate && python -m tox)
@@ -14,6 +25,7 @@ tox:
 prepare:
 	sudo apt-get -y install python3-pip python3-virtualenv
 
+.PHONY: venv
 venv:
 	test ! -f venv && virtualenv -p python3 venv || true
 	(. ./venv/bin/activate && pip install -r requirements-dev.txt)

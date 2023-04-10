@@ -47,7 +47,7 @@ class TimedOutException(Exception):
         self.value = value
 
     def __str__(self):
-        return repr(self.value)
+        return str(self.value)
 
 
 def timeout(f, timeout, *args, **kwargs):
@@ -115,23 +115,23 @@ class ThreadedCMD(threading.Thread):
             result = self.__f(*self.__args, **self.__kwargs)
             # Set result in the queue
             self.__result.put(result)
-        except (Exception, KeyboardInterrupt) as e:
+        except (Exception, KeyboardInterrupt) as e:  # pragma: no cover
             self.__exception = e
 
     def exception(self):
         if self.__exception:
-            return self.__exception
+            return self.__exception  # pragma: no cover
         else:
             return None
 
 
-def terminate_thread(thread):
+def terminate_thread(thread):  # pragma: no cover
     """Terminates a python thread from another thread.
 
     :param thread: a threading.Thread instance
     """
     if not thread.is_alive():
-        return
+        return  # pragma: no cover
 
     exc = ctypes.py_object(SystemExit)
     res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
@@ -190,7 +190,7 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
             # Wait for another loop
             try:
                 time.sleep(reactivity)
-            except (Exception, KeyboardInterrupt):
+            except (Exception, KeyboardInterrupt):  # pragma: no cover
                 break
 
     # Get exceptions if any
@@ -200,19 +200,19 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
     if th.is_alive():
         # Stop the thread
         if quit:
-            quit()
+            quit()  # pragma: no cover
         terminate_thread(th)
         # Raise exception since we didn't finish on time
         if ex:
-            raise ex
+            raise ex  # pragma: no cover
         else:
             raise TimedOutException()
     else:
         # Return the result of the function
         if ex:
-            raise ex
+            raise ex  # pragma: no cover
         else:
             try:
                 return result.get(False)
-            except (Exception, KeyboardInterrupt):
+            except (Exception, KeyboardInterrupt):  # pragma: no cover
                 return None

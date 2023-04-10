@@ -1,3 +1,4 @@
+from codenerix_lib.colors import colorize
 from codenerix_lib.colors import get_colors
 
 
@@ -23,3 +24,9 @@ def test_colors():
     )
 
     assert get_colors() == expected
+
+
+def test_colorize():
+    assert colorize("ABC", "red") == "\x1b[1;31mABC\x1b[1;00m"
+    assert colorize("ABC", "simplered") == "\x1b[0;31mABC\x1b[1;00m"
+    assert colorize("ABC", "abc") == "\x1b[1;00mABC\x1b[1;00m"

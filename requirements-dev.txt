@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements-dev.in
 #
-attrs==22.2.0
-    # via pytest
 black==23.3.0
     # via -r requirements-dev.in
 build==0.10.0
@@ -25,11 +23,13 @@ colorama==0.4.6
     # via
     #   -r requirements-dev.in
     #   tox
+coverage==7.2.3
+    # via -r requirements-dev.in
 distlib==0.3.6
     # via virtualenv
 exceptiongroup==1.1.1
     # via pytest
-filelock==3.10.7
+filelock==3.11.0
     # via
     #   tox
     #   virtualenv
@@ -54,7 +54,7 @@ packaging==23.0
     #   tox
 pathspec==0.11.1
     # via black
-pip-tools==6.12.3
+pip-tools==6.13.0
     # via -r requirements-dev.in
 platformdirs==3.2.0
     # via
@@ -65,7 +65,7 @@ pluggy==1.0.0
     # via
     #   pytest
     #   tox
-pre-commit==3.2.1
+pre-commit==3.2.2
     # via -r requirements-dev.in
 pycryptodomex==3.17
     # via -r requirements-dev.in
@@ -73,7 +73,7 @@ pyproject-api==1.5.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.2.2
+pytest==7.3.0
     # via
     #   -r requirements-dev.in
     #   pytest-mock
@@ -92,7 +92,7 @@ tomli==2.0.1
     #   pyproject-api
     #   pytest
     #   tox
-tox==4.4.8
+tox==4.4.11
     # via -r requirements-dev.in
 tqdm==4.65.0
     # via nltk

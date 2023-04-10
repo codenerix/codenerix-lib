@@ -23,13 +23,9 @@ Debugger helps to debug the system
 from datetime import datetime
 from inspect import currentframe
 from os import getcwd
-from pathlib import Path
+from typing import Any
 from typing import Dict
-from typing import List
-from typing import Text
-from typing import TextIO
-from typing import Tuple
-from typing import Union
+from typing import Optional
 
 from codenerix_lib.colors import colors
 
@@ -64,7 +60,7 @@ def __FILE__():  # noqa: N802,N807
 
 class Debugger(object):
 
-    __indebug: Dict[str, Tuple[Union[Text, Path, TextIO], List[str]]] = {}
+    __indebug: Dict[str, Any] = {}
     __inname = None
 
     KINDS = [
@@ -89,7 +85,10 @@ class Debugger(object):
         # debugger['log'] = (open("log/debug.log","a"), ['*'] )
         self.set_debug(debugger)
 
-    def set_debug(self, debug=None):
+    def set_debug(
+        self,
+        debug: Optional[Dict[str, Any]] = None,
+    ):
         if debug is None:
             self.__autoconfig()
         else:

@@ -9,3 +9,4 @@ black
 tox
 pip-tools
 pre-commit
+coverage
