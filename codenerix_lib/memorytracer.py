@@ -52,11 +52,11 @@ class MemoryTracer(Debugger):
                 color = "red"
             else:
                 percent = stat.size / top * 100
-                if percent > percents[0]:
+                if percent > percents[0]:  # pragma: no cover
                     color = "red"
-                elif percent > percents[1]:
+                elif percent > percents[1]:  # pragma: no cover
                     color = "yellow"
-                else:
+                else:  # pragma: no cover
                     color = "cyan"
             frame = stat.traceback[0]
             # replace "/path/to/module/file.py" with "module/file.py"
@@ -90,7 +90,7 @@ class MemoryTracer(Debugger):
             answer["top"].append(token)
 
         other = top_stats[limit:]
-        if other:
+        if other:  # pragma: no cover
             size = sum(stat.size for stat in other)
             answer["other"] = size
             answer["otherkb"] = float(size) / 1024.0

@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 
 from codenerix_lib.debugger import Debugger
@@ -15,6 +16,15 @@ def test_debugger(capsys, mocker):
     # Prepare debugger
     debugger = Debugger()
     debugger.set_debug()
+    assert debugger.get_debug() == {"screen": (sys.stdout, ["*"])}
+
+    # Check wrong collor
+    debugger.color("ABC")
+    cap = capsys.readouterr()
+    assert (
+        cap.out
+        == "31/12/2020 12:13:14 Debugger        - \x1b[1;31mColor 'ABC' unknown\x1b[1;00m\n\x1b[1;00m\n"  # noqa: E501
+    )
 
     # Check naming
     assert debugger.get_name() is None
