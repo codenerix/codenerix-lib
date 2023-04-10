@@ -28,3 +28,6 @@ jobs:
 
     - name: Tox system
       run: make tox
+
+    - name: Set Codecov Badge
+      uses: codecov/codecov-action@v3
