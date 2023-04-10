@@ -10,10 +10,11 @@ test:
 coverage:
 	-### Executing coverage...
 	(. ./venv/bin/activate && coverage run -m pytest tests)
-	make coverage_report
 
-.PHONY: coverage_report
-coverage_report:
+.PHONY: coverage_html
+coverage_html:
+	make coverage
+	-### Prepare coverage HTML report...
 	(. ./venv/bin/activate && coverage html)
 	open htmlcov/index.html 2>/dev/null 1>&2
 
