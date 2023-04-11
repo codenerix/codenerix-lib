@@ -56,6 +56,12 @@ def test_debugger(capsys, mocker):
     cap = capsys.readouterr()
     assert cap.out == "31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m"
 
+    # Check mix
+    debugger.debug("Hola", head=False, tail=False)
+    debugger.debug("caracola", head=False)
+    cap = capsys.readouterr()
+    assert cap.out == "Hola\x1b[1;00mcaracola\x1b[1;00m\n"
+
     # Blue color
     debugger.debug("Hola", color="blue")
     cap = capsys.readouterr()
