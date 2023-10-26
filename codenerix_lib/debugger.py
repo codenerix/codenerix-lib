@@ -22,7 +22,8 @@ Debugger helps to debug the system
 from datetime import datetime
 from inspect import currentframe
 from os import getcwd
-from typing import Any, Dict, Optional
+from pathlib import Path
+from typing import Any, Dict, List, Optional, TextIO, Tuple, Union
 
 from codenerix_lib.colors import colors
 
@@ -56,7 +57,7 @@ def __FILE__():  # noqa: N802,N807
 
 
 class Debugger:
-    __indebug: Dict[str, Any] = {}
+    __indebug: Dict[str, Tuple[Union[str, Path, TextIO], List[str]]] = {}
     __inname = None
 
     KINDS = [
