@@ -15,6 +15,15 @@ with pathlib.Path("requirements.txt").open() as requirements_txt:
         for requirement in pkg_resources.parse_requirements(requirements_txt)
     ]
 
+author = ", ".join(
+    [author.split("<")[0] for author in codenerix_lib.__authors__],
+)
+author_email = ", ".join(
+    [
+        author.split("<")[-1].split(">")[0]
+        for author in codenerix_lib.__authors__
+    ],
+)
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
@@ -31,7 +40,8 @@ setup(
     description="Basic libraries used by CODENERIX.",
     long_description=README,
     url="https://github.com/codenerix/codenerix-lib",
-    author=", ".join(codenerix_lib.__authors__),
+    author=author,
+    author_email=author_email,
     keywords=["codenerix"],
     platforms=["OS Independent"],
     classifiers=[
