@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-codenerix
 #
@@ -23,8 +22,8 @@ Library to handle lockers over files
 
 __version__ = "2023033000"
 
-import os
 import fcntl
+import os
 
 __all__ = ["pylock", "PyLock", "AlreadyLocked"]
 
@@ -111,7 +110,7 @@ class PyLock:  # noqa: N801
                 print("{} - Normal lock!".format(self.__verbose))
             try:
                 fcntl.flock(self.__fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except IOError:
+            except OSError:
                 if self.__verbose:  # pragma: no cover
                     print("{} - Already locked!".format(self.__verbose))
                 raise AlreadyLocked("File is already locked")

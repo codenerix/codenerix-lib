@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-codenerix-extensions
 #
@@ -35,7 +34,7 @@ from Cryptodome import Random
 from Cryptodome.Cipher import AES
 
 
-class AESCipher(object):
+class AESCipher:
     """
     Adapted solution from: https://stackoverflow.com/a/21928790/1481040
     """

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-codenerix
 #
@@ -25,11 +24,11 @@ timeout is reached if the called function didn't finish execution before
 
 __version__ = "2017112900"
 
-import time
+import ctypes
 import queue
 import signal
-import ctypes
 import threading
+import time
 
 __all__ = ["TimedOutException", "timeout", "timeout2"]
 
@@ -69,7 +68,7 @@ def timeout(f, timeout, *args, **kwargs):
 
     # Control that timeout can not be zero or negative
     if timeout <= 0:
-        raise IOError("Timeout can not be zero or less than zero")
+        raise OSError("Timeout can not be zero or less than zero")
 
     # Define the handler
     def handler(signum, frame):
@@ -97,7 +96,7 @@ def timeout(f, timeout, *args, **kwargs):
 class ThreadedCMD(threading.Thread):
     def __init__(self, result, f, args=(), kwargs={}):
         # Initialice thread
-        super(ThreadedCMD, self).__init__()
+        super().__init__()
 
         # Save incoming data
         self.__f = f
@@ -172,7 +171,7 @@ def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
 
     # Control that timeout can not be zero or negative
     if timeout <= 0:
-        raise IOError("Timeout can not be zero or less than zero")
+        raise OSError("Timeout can not be zero or less than zero")
 
     # Prepare queue
     result = queue.Queue()

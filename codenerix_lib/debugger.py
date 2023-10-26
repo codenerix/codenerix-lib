@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-codenerix
 #
@@ -23,9 +22,7 @@ Debugger helps to debug the system
 from datetime import datetime
 from inspect import currentframe
 from os import getcwd
-from typing import Any
-from typing import Dict
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from codenerix_lib.colors import colors
 
@@ -58,8 +55,7 @@ def __FILE__():  # noqa: N802,N807
     return filename
 
 
-class Debugger(object):
-
+class Debugger:
     __indebug: Dict[str, Any] = {}
     __inname = None
 
@@ -92,7 +88,7 @@ class Debugger(object):
         if debug is None:
             self.__autoconfig()
         else:
-            if type(debug) is dict:
+            if isinstance(debug, dict):
                 # Set the deepness system
                 idebug = debug.copy()
                 if "deepness" in debug:  # pragma: no cover
@@ -110,7 +106,7 @@ class Debugger(object):
                 # Save internal debugger
                 self.__indebug = idebug
             else:  # pragma: no cover
-                raise IOError("Argument is not a dictionary")
+                raise OSError("Argument is not a dictionary")
 
     def set_origin(self, origin):  # pragma: no cover
         self.origin = origin
@@ -147,7 +143,6 @@ class Debugger(object):
         origin=False,
         kind="",
     ):
-
         # If origin has been requested
         if origin or getattr(self, "origin", False):  # pragma: no cover
             origin = True
@@ -186,10 +181,8 @@ class Debugger(object):
 
         # For each element inside indebug
         for name in self.__indebug:
-
             # If this is no deepeness key, keep going
             if name not in ["deepness", "tabular"]:
-
                 # Get color
                 if name == "screen" or name[-1] == "*":
                     color_ini = self.color(color)
@@ -202,7 +195,7 @@ class Debugger(object):
                 (handler, indebug) = self.__indebug[name]
 
                 if not kind or "-*{}".format(kind) not in indebug:
-                    if msg and type(handler) == str:
+                    if msg and isinstance(handler, str):
                         # Open handler buffer
                         handlerbuf = open(handler, "a")
                     else:
@@ -212,7 +205,6 @@ class Debugger(object):
                     if (clname in indebug) or (
                         ("*" in indebug) and ("-%s" % (clname) not in indebug)
                     ):
-
                         # Set line head name
                         if self.__inname:
                             headname = self.__inname
@@ -254,7 +246,7 @@ class Debugger(object):
                             return True
 
                     # Autoclose handler when done
-                    if msg and type(handler) == str:
+                    if msg and isinstance(handler, str):
                         handlerbuf.close()
 
         # If we shouldn't show the output
@@ -517,15 +509,13 @@ class Debugger(object):
 
         # For each element inside indebug
         for name in self.__indebug:
-
             # If this is no deepeness key, keep going
             if name not in ["deepness", "tabular"]:
-
                 # Get file output handler and indebug list
                 (handler, indebug) = self.__indebug[name]
 
                 if "-*{}".format(kind) not in indebug:
-                    if type(handler) == str:
+                    if isinstance(handler, str):
                         # Open handler buffer
                         handlerbuf = open(handler, "a")
                     else:
@@ -584,5 +574,5 @@ class Debugger(object):
                     handlerbuf.flush()
 
                     # Autoclose handler when done
-                    if type(handler) == str:
+                    if isinstance(handler, str):
                         handlerbuf.close()

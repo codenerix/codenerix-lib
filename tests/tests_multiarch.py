@@ -3,8 +3,7 @@ from datetime import datetime
 
 from pytest import raises
 
-from codenerix_lib.multiarch import multiarch_import
-from codenerix_lib.multiarch import whatismyarch
+from codenerix_lib.multiarch import multiarch_import, whatismyarch
 
 
 def test_whatismyarch():
@@ -60,7 +59,6 @@ def test_multiarch_error_whatismyarch_nosufix(capsys, mocker):
 
 
 def test_multiarch_import(capsys, mocker):
-
     # Mock datetime
     now = datetime(2020, 12, 31, 12, 13, 14)
     mock_datetime = mocker.MagicMock(wraps=datetime)

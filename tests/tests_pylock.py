@@ -3,8 +3,7 @@ import tempfile
 
 from pytest import raises
 
-from codenerix_lib.pylock import AlreadyLocked
-from codenerix_lib.pylock import PyLock
+from codenerix_lib.pylock import AlreadyLocked, PyLock
 
 
 def test_pylock():

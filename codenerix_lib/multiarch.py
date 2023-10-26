@@ -56,7 +56,6 @@ def multiarch_import(name, sufix=None, using=False):
             )
 
     elif sufix != "":
-
         # No sufix was given, try to detect the architecture
         # using 'whatismyarch()'
         try:
@@ -72,7 +71,6 @@ def multiarch_import(name, sufix=None, using=False):
 
         # We got an architecture
         if arch:
-
             # Try to import detected architecture
             try:
                 imported = __import__(f"{name}_{arch}")

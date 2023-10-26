@@ -1,14 +1,12 @@
-from codenerix_lib.debugger import __FILE__
-from codenerix_lib.debugger import __LINE__
-from codenerix_lib.debugger import lineno
+from codenerix_lib.debugger import __FILE__, __LINE__, lineno
 
 
 def test_lineno():
-    assert lineno() == 7
+    assert lineno() == 5
 
 
 def test___line__():
-    assert __LINE__() == 11
+    assert __LINE__() == 9
 
 
 def test___file__():

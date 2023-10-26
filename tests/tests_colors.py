@@ -1,5 +1,4 @@
-from codenerix_lib.colors import colorize
-from codenerix_lib.colors import get_colors
+from codenerix_lib.colors import colorize, get_colors
 
 
 def test_colors():

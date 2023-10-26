@@ -1,12 +1,10 @@
 import sys
 from datetime import datetime
 
-from codenerix_lib.debugger import Debugger
-from codenerix_lib.debugger import lineno
+from codenerix_lib.debugger import Debugger, lineno
 
 
 def test_debugger(capsys, mocker):
-
     # Mock datetime
     now = datetime(2020, 12, 31, 12, 13, 14)
     mock_datetime = mocker.MagicMock(wraps=datetime)

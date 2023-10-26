@@ -2,9 +2,7 @@ import time
 
 from pytest import raises
 
-from codenerix_lib.timeout import TimedOutException
-from codenerix_lib.timeout import timeout
-from codenerix_lib.timeout import timeout2
+from codenerix_lib.timeout import TimedOutException, timeout, timeout2
 
 
 def slow(num):
@@ -13,7 +11,6 @@ def slow(num):
 
 
 def test_timeout():
-
     with raises(IOError):
         timeout(slow, 0, 5)
 
@@ -30,7 +27,6 @@ def test_timeout():
 
 
 def test_timeout2():
-
     # Basic control
     with raises(IOError):
         timeout2(slow, 0, None, 0.1, [5])
