@@ -67,7 +67,7 @@ pluggy==1.0.0
     #   tox
 pre-commit==3.2.2
     # via -r requirements-dev.in
-pycryptodomex==3.17
+pycryptodomex==3.19.1
     # via -r requirements-dev.in
 pyproject-api==1.5.1
     # via tox
@@ -90,6 +90,7 @@ tomli==2.0.1
     #   black
     #   build
     #   pyproject-api
+    #   pyproject-hooks
     #   pytest
     #   tox
 tox==4.4.11
