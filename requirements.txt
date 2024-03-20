@@ -12,7 +12,7 @@ joblib==1.2.0
     # via nltk
 nltk==3.8.1
     # via -r requirements.in
-pycryptodomex==3.17
+pycryptodomex==3.19.1
     # via -r requirements.in
 regex==2023.3.23
     # via nltk
