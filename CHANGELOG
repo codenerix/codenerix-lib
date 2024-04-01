@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.24] - 2023-03-30
+### Changed
+ - Added copyright to LICENSE
+
+## [1.0.23] - 2023-10-26
+### Changed
+ - Author information is recalculated properly in the `setup.py` file
+ - Typing improvements to `debugger.py`
+
+## [1.0.22] - 2023-10-26
+### Features
+ - New tests
+ - New type hints
+
 ## [1.0.21] - 2023-03-30
 ### Added
 - Tests
