@@ -33,12 +33,9 @@ venv:
 
 .PHONY: requirements
 requirements:
-	@rm -f requirements*.txt
-	@pip-compile requirements.in
-	@pip-compile requirements-dev.in
-
-.PHONY: syncrequirements
-syncrequirements: requirements
+	-@rm -f requirements*.txt
+	@(. ./venv/bin/activate && pip-compile --resolver=backtracking requirements.in)
+	@(. ./venv/bin/activate && pip-compile --resolver=backtracking requirements-dev.in)
 	(. ./venv/bin/activate && pip-sync requirements*.txt)
 
 .PHONY: deps
