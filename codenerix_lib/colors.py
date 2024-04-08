@@ -30,27 +30,51 @@ __version__ = "201109111106"
 __all__ = ["colors"]
 
 
-colors = {}
+# Colors
+colors = {
+    # Simple
+    "simplegrey": (0, 30),
+    "simplered": (0, 31),
+    "simplegreen": (0, 32),
+    "simpleyellow": (0, 33),
+    "simpleblue": (0, 34),
+    "simplepurple": (0, 35),
+    "simplecyan": (0, 36),
+    "simplewhite": (0, 37),
+    # Bold
+    "grey": (1, 30),
+    "red": (1, 31),
+    "green": (1, 32),
+    "yellow": (1, 33),
+    "blue": (1, 34),
+    "purple": (1, 35),
+    "cyan": (1, 36),
+    "white": (1, 37),
+    # Close
+    "close": (1, 0),
+}
 
-colors["simplegrey"] = (0, 30)
-colors["simplered"] = (0, 31)
-colors["simplegreen"] = (0, 32)
-colors["simpleyellow"] = (0, 33)
-colors["simpleblue"] = (0, 34)
-colors["simplepurple"] = (0, 35)
-colors["simplecyan"] = (0, 36)
-colors["simplewhite"] = (0, 37)
-
-colors["grey"] = (1, 30)
-colors["red"] = (1, 31)
-colors["green"] = (1, 32)
-colors["yellow"] = (1, 33)
-colors["blue"] = (1, 34)
-colors["purple"] = (1, 35)
-colors["cyan"] = (1, 36)
-colors["white"] = (1, 37)
-
-colors["close"] = (1, 0)
+# HTML Colors
+html_colors = {
+    # Simple
+    "simplegrey": (0, (128, 128, 128)),
+    "simplered": (0, (255, 0, 0)),
+    "simplegreen": (0, (0, 255, 0)),
+    "simpleyellow": (0, (255, 255, 0)),
+    "simpleblue": (0, (0, 0, 255)),
+    "simplepurple": (0, (128, 0, 128)),
+    "simplecyan": (0, (0, 255, 255)),
+    "simplewhite": (0, (255, 255, 255)),
+    # Bold
+    "grey": (1, (169, 169, 169)),
+    "red": (1, (255, 69, 0)),
+    "green": (1, (0, 128, 0)),
+    "yellow": (1, (255, 255, 0)),
+    "blue": (1, (0, 0, 255)),
+    "purple": (1, (128, 0, 128)),
+    "cyan": (1, (0, 255, 255)),
+    "white": (1, (255, 255, 255)),
+}
 
 
 def colorize(msg, color=None):

@@ -25,7 +25,7 @@ from os import getcwd
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TextIO, Tuple, Union
 
-from codenerix_lib.colors import colors
+from codenerix_lib.colors import colors, html_colors
 
 __version__ = "2023033000"
 
@@ -86,6 +86,8 @@ class Debugger:
         self,
         debug: Optional[Dict[str, Any]] = None,
     ):
+        self.html = None
+        self.html_bgcolor = None
         if debug is None:
             self.__autoconfig()
         else:
@@ -109,6 +111,13 @@ class Debugger:
             else:  # pragma: no cover
                 raise OSError("Argument is not a dictionary")
 
+    def set_html_color(self, bgcolor=None):
+        self.html = True
+        self.html_bgcolor = bgcolor
+
+    def set_shell_color(self):
+        self.html = False
+
     def set_origin(self, origin):  # pragma: no cover
         self.origin = origin
 
@@ -121,17 +130,50 @@ class Debugger:
     def get_name(self):
         return self.__inname
 
-    def color(self, color):
-        # Colors$
+    def shell_color(self, color):
+        # Colors
         if color in colors:
             (darkbit, subcolor) = colors[color]
-            return "\033[%1d;%02dm" % (darkbit, subcolor)
+            return f"\033[{darkbit:1d};{subcolor:02d}m"
         else:
             if color:
                 self.debug(
-                    "\033[1;31mColor '%s' unknown\033[1;00m\n" % (color),
+                    f"\033[1;31mColor '{color}' unknown\033[1;00m\n",
                 )
             return ""
+
+    def html_color(self, color):
+        # Colors
+        if color == "close":
+            return "</span>"
+        elif color in html_colors:
+            (bold, subcolor) = html_colors[color]
+            if not bold:
+                bolder = ""
+            else:
+                bolder = "; font-weight: bolder"
+            if not self.html_bgcolor:
+                bgcolor = ""
+            else:
+                bgcolor = f"; background-color:rgb{self.html_bgcolor}"
+            return f'<span style="color: rgb{subcolor}{bgcolor}{bolder}">'
+        else:
+            if color:
+                (bold, subcolor) = html_colors["red"]
+                self.debug(
+                    f'<span style="color: rgb{subcolor}; font-weight: bolder">'
+                    f"Color '{color}' unknown"
+                    "</span>\n",
+                )
+            return ""
+
+    def color(self, color, html=None):
+        if html is None:
+            html = self.html
+        if not html:
+            return self.shell_color(color)
+        else:
+            return self.html_color(color)
 
     def debug(
         self,
@@ -143,6 +185,7 @@ class Debugger:
         footer=None,
         origin=False,
         kind="",
+        html=None,
     ):
         # If origin has been requested
         if origin or getattr(self, "origin", False):  # pragma: no cover
@@ -167,7 +210,7 @@ class Debugger:
                 header = head
         if tail is None:
             if footer is None:
-                tail = True
+                tail = "\n"
             else:
                 tail = footer
 
@@ -186,10 +229,10 @@ class Debugger:
             if name not in ["deepness", "tabular"]:
                 # Get color
                 if name == "screen" or name[-1] == "*":
-                    color_ini = self.color(color)
-                    color_end = self.color("close")
+                    color_ini = self.color(color, html)
+                    color_end = self.color("close", html)
                 else:
-                    color_ini = self.color(None)
+                    color_ini = self.color(None, html)
                     color_end = color_ini
 
                 # Get file output handler and indebug list
@@ -235,7 +278,7 @@ class Debugger:
                                 message += str(msg.encode("ascii", "ignore"))
                         message += color_end
                         if tail:
-                            message += "\n"
+                            message += tail
 
                         # Print it on the buffer handler
                         if msg:
@@ -255,7 +298,14 @@ class Debugger:
             # Say to the caller we shouldn't output anything
             return False
 
-    def primary(self, msg, header=True, tail=True, show_line_info=False):
+    def primary(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=False,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -281,9 +331,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def secondary(self, msg, header=True, tail=True, show_line_info=False):
+    def secondary(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=False,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -309,9 +367,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def success(self, msg, header=True, tail=True, show_line_info=False):
+    def success(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=False,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -337,9 +403,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def danger(self, msg, header=True, tail=True, show_line_info=False):
+    def danger(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=False,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -365,9 +439,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def warning(self, msg, header=True, tail=True, show_line_info=True):
+    def warning(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=True,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -393,9 +475,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def info(self, msg, header=True, tail=True, show_line_info=False):
+    def info(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=False,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -421,9 +511,17 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
-    def error(self, msg, header=True, tail=True, show_line_info=True):
+    def error(
+        self,
+        msg,
+        header=True,
+        tail=True,
+        show_line_info=True,
+        html=None,
+    ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
             filename = currentframe().f_back.f_code.co_filename.replace(
@@ -449,6 +547,7 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
     def debug_with_style(
@@ -460,6 +559,7 @@ class Debugger:
         show_line_info,
         header=True,
         tail=True,
+        html=False,
     ):
         if show_line_info:  # pragma: no cover
             line = currentframe().f_back.f_lineno
@@ -486,6 +586,7 @@ class Debugger:
             filename,
             header,
             tail,
+            html,
         )
 
     def __warningerror(
@@ -498,6 +599,7 @@ class Debugger:
         filename,
         header,
         tail,
+        html=False,
     ):
         # Retrieve the name of the class
         clname = self.__class__.__name__
@@ -524,10 +626,10 @@ class Debugger:
 
                     # Get color
                     if name == "screen" or name[-1] == "*":
-                        color_ini = self.color(color)
-                        color_end = self.color("close")
+                        color_ini = self.color(color, html)
+                        color_end = self.color("close", html)
                     else:
-                        color_ini = self.color(None)
+                        color_ini = self.color(None, html)
                         color_end = color_ini
 
                     # Build the message
