@@ -72,6 +72,7 @@ class Debugger:
 
     def __init__(self, **kwargs):
         self.set_debug(debug=kwargs.get("debug", None))
+        super().__init__()
 
     def __autoconfig(self):
         # Define debug configuration
@@ -86,8 +87,8 @@ class Debugger:
         self,
         debug: Optional[Dict[str, Any]] = None,
     ):
-        self.html = None
-        self.html_bgcolor = None
+        self.__html = None
+        self.__html_bgcolor = None
         if debug is None:
             self.__autoconfig()
         else:
@@ -112,11 +113,11 @@ class Debugger:
                 raise OSError("Argument is not a dictionary")
 
     def set_html_color(self, bgcolor=None):
-        self.html = True
-        self.html_bgcolor = bgcolor
+        self.__html = True
+        self.__html_bgcolor = bgcolor
 
     def set_shell_color(self):
-        self.html = False
+        self.__html = False
 
     def set_origin(self, origin):  # pragma: no cover
         self.origin = origin
@@ -130,7 +131,7 @@ class Debugger:
     def get_name(self):
         return self.__inname
 
-    def shell_color(self, color):
+    def __shell_color(self, color):
         # Colors
         if color in colors:
             (darkbit, subcolor) = colors[color]
@@ -142,7 +143,7 @@ class Debugger:
                 )
             return ""
 
-    def html_color(self, color):
+    def __html_color(self, color):
         # Colors
         if color == "close":
             return "</span>"
@@ -152,10 +153,10 @@ class Debugger:
                 bolder = ""
             else:
                 bolder = "; font-weight: bolder"
-            if not self.html_bgcolor:
+            if not self.__html_bgcolor:
                 bgcolor = ""
             else:
-                bgcolor = f"; background-color:rgb{self.html_bgcolor}"
+                bgcolor = f"; background-color:rgb{self.__html_bgcolor}"
             return f'<span style="color: rgb{subcolor}{bgcolor}{bolder}">'
         else:
             if color:
@@ -169,11 +170,11 @@ class Debugger:
 
     def color(self, color, html=None):
         if html is None:
-            html = self.html
+            html = self.__html
         if not html:
-            return self.shell_color(color)
+            return self.__shell_color(color)
         else:
-            return self.html_color(color)
+            return self.__html_color(color)
 
     def debug(
         self,
