@@ -98,7 +98,7 @@ tomli==2.0.1
     #   tox
 tox==4.14.2
     # via -r requirements-dev.in
-tqdm==4.66.2
+tqdm==4.66.3
     # via nltk
 typing-extensions==4.10.0
     # via black
