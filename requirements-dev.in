@@ -5,6 +5,7 @@ textnorm
 unidecode
 pytest
 pytest-mock
+pytest-sugar
 black
 tox
 pip-tools

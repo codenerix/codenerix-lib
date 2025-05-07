@@ -133,21 +133,18 @@ def test_debugger(capsys, mocker):
     )
 
 
-class TestBase:
-    def __init__(self):
-        self.set_debug({})
-
-
-class Test(Debugger):
-    def __init__(self):
-        super().__init__()
-
-
-class Test2(Debugger, TestBase):
-    def __init__(self):
-        super().__init__()
-
-
 def test_inheritance():
+    class TestBase:
+        def __init__(self):
+            self.set_debug({})
+
+    class Test(Debugger):
+        def __init__(self):
+            super().__init__()
+
+    class Test2(Debugger, TestBase):
+        def __init__(self):
+            super().__init__()
+
     assert Test().get_debug() == {"screen": (sys.stdout, ["*"])}
     assert Test2().get_debug() == {}

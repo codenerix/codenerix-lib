@@ -44,8 +44,6 @@ def strong_normalizer(
         String already normalized
     """
 
-    global stop_words
-
     # Normalize unicode
     string = textnorm.normalize_unicode(string)
 

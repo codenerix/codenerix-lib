@@ -239,7 +239,7 @@ class Debugger:
                 # Get file output handler and indebug list
                 (handler, indebug) = self.__indebug[name]
 
-                if not kind or "-*{}".format(kind) not in indebug:
+                if not kind or f"-*{kind}" not in indebug:
                     if msg and isinstance(handler, str):
                         # Open handler buffer
                         handlerbuf = open(handler, "a")
@@ -269,8 +269,12 @@ class Debugger:
                                 f"{now.second:02d} "
                             )
                             if origin:
-                                message += "{}:{}: ".format(filename, line)
-                            message += "{:<15s} - {}".format(headname, tabular)
+                                message += (
+                                    str(filename) + ":" + str(line) + ": "
+                                )
+                            message += (
+                                f"{headname:<15s}" + " - " + str(tabular)
+                            )
 
                         if msg:
                             try:
@@ -618,7 +622,7 @@ class Debugger:
                 # Get file output handler and indebug list
                 (handler, indebug) = self.__indebug[name]
 
-                if "-*{}".format(kind) not in indebug:
+                if f"-*{kind}" not in indebug:
                     if isinstance(handler, str):
                         # Open handler buffer
                         handlerbuf = open(handler, "a")
@@ -653,8 +657,8 @@ class Debugger:
                             now.second,
                         )
                         if filename or line:
-                            message += "{}:{}: ".format(filename, line)
-                        message += "%-15s - %s" % (headname, tabular)
+                            message += str(filename) + ":" + str(line) + ": "
+                        message += f"{headname:<15s}" + " - " + str(tabular)
                     if msg:
                         try:
                             message += str(msg)
