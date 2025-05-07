@@ -41,7 +41,7 @@ joblib==1.4.2
     # via nltk
 mypy-extensions==1.0.0
     # via black
-nltk==3.8.1
+nltk==3.9
     # via -r requirements-dev.in
 nodeenv==1.9.1
     # via pre-commit
