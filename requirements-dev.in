@@ -8,6 +8,7 @@ pytest-mock
 pytest-sugar
 black
 tox
+pbr
 pip-tools
 pre-commit
 coverage

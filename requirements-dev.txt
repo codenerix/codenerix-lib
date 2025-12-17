@@ -52,6 +52,8 @@ packaging==25.0
     #   tox
 pathspec==0.12.1
     # via black
+pbr==7.0.3
+    # via -r requirements-dev.in
 pip-tools==7.5.2
     # via -r requirements-dev.in
 platformdirs==4.5.1
