@@ -102,7 +102,7 @@ tqdm==4.67.1
     # via nltk
 unidecode==1.4.0
     # via -r requirements-dev.in
-virtualenv==20.35.4
+virtualenv==20.36.1
     # via
     #   pre-commit
     #   tox
