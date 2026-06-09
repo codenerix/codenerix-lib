@@ -1,7 +1,6 @@
 import os
 import pathlib
 
-import pkg_resources
 from setuptools import setup
 
 import codenerix_lib
@@ -9,11 +8,17 @@ import codenerix_lib
 with open(os.path.join(os.path.dirname(__file__), "README.rst")) as readme:
     README = readme.read()
 
-with pathlib.Path("requirements.txt").open() as requirements_txt:
-    install_requires = [
-        str(requirement)
-        for requirement in pkg_resources.parse_requirements(requirements_txt)
+
+def _read_requirements(path):
+    """Loose direct deps from requirements.in (never the compiled lock)."""
+    return [
+        line.strip()
+        for line in pathlib.Path(path).read_text().splitlines()
+        if line.strip() and not line.lstrip().startswith(("#", "-"))
     ]
+
+
+install_requires = _read_requirements("requirements.in")
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))

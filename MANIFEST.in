@@ -2,6 +2,7 @@ include CHANGELOG
 include MANIFEST.in
 include LICENSE
 include README.rst
+include requirements.in
 include requirements.txt
 exclude *.pyc
 exclude __pycache__
