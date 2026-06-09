@@ -5,7 +5,7 @@ from setuptools import setup
 
 import codenerix_lib
 
-with open(os.path.join(os.path.dirname(__file__), "README.rst")) as readme:
+with open(os.path.join(os.path.dirname(__file__), "README.md")) as readme:
     README = readme.read()
 
 
@@ -35,6 +35,7 @@ setup(
     license="Apache License Version 2.0",
     description="Basic libraries used by CODENERIX.",
     long_description=README,
+    long_description_content_type="text/markdown",
     url="https://github.com/codenerix/codenerix-lib",
     author=", ".join(codenerix_lib.__authors__),
     author_email=", ".join(codenerix_lib.__authors_email__),
@@ -43,15 +44,17 @@ setup(
     classifiers=[
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
-        "License :: Other/Proprietary License",
+        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
+    python_requires=">=3.10",
     install_requires=install_requires,
 )
