@@ -69,7 +69,7 @@ pre-commit==4.5.1
     # via -r requirements-dev.in
 pycryptodomex==3.23.0
     # via -r requirements-dev.in
-pygments==2.19.2
+pygments==2.20.0
     # via pytest
 pyproject-api==1.10.0
     # via tox
