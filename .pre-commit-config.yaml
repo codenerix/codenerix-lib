@@ -1,44 +1,44 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-    -   id: check-added-large-files
-    -   id: check-ast
-    -   id: check-merge-conflict
-    -   id: check-yaml
-    -   id: debug-statements
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
--   repo: https://github.com/psf/black
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/psf/black
     rev: 25.12.0
     hooks:
-    -   id: black
+      - id: black
         args:
           - --line-length=79
           - --include='\.pyi?$'
--   repo: https://github.com/PyCQA/isort
+  - repo: https://github.com/PyCQA/isort
     rev: 7.0.0
     hooks:
-    -   id: isort
+      - id: isort
         name: isort
         args: [--profile, black, --line-length, "79"]
--   repo: https://github.com/asottile/add-trailing-comma
+  - repo: https://github.com/asottile/add-trailing-comma
     rev: v4.0.0
     hooks:
-    -   id: add-trailing-comma
--   repo: https://github.com/pre-commit/pre-commit-hooks
+      - id: add-trailing-comma
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
-    - id: flake8
-      args:
-        - "--max-line-length=79"
-        - "--select=B,C,E,F,W,T4,B9"
-        - "--ignore=E203,W503"
-        # - "--max-complexity=18"
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.19.1'
+      - id: flake8
+        args:
+          - "--max-line-length=79"
+          - "--select=B,C,E,F,W,T4,B9"
+          - "--ignore=E203,W503"
+          # - "--max-complexity=18"
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v1.19.1"
     hooks:
       - id: mypy
         additional_dependencies: [tokenize-rt==3.2.0, types-setuptools]
@@ -46,31 +46,35 @@ repos:
         # exclude: ^tests/
         # args: [--python-version 3.10, --ignore-missing-imports, --disallow-untyped-defs]
         # args: [--no-strict-optional, --ignore-missing-imports]
--   repo: https://github.com/asottile/pyupgrade
+  - repo: https://github.com/asottile/pyupgrade
     rev: v3.21.2
     hooks:
-    -   id: pyupgrade
+      - id: pyupgrade
         args: [--keep-percent-format]
--   repo: https://github.com/keewis/blackdoc
+  - repo: https://github.com/keewis/blackdoc
     rev: v0.4.6
     hooks:
-    -   id: blackdoc
+      - id: blackdoc
         args: ["-l", "78"]
         exclude: ^doc/.*
--   repo: https://github.com/shellcheck-py/shellcheck-py
+  - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
-    -   id: shellcheck
--   repo: https://github.com/get-woke/woke
+      - id: shellcheck
+  - repo: https://github.com/get-woke/woke
     rev: v0.19.0
     hooks:
-    -   id: woke-from-source
--   repo: https://github.com/PyCQA/bandit
+      - id: woke-from-source
+  - repo: https://github.com/PyCQA/bandit
     rev: 1.9.2
     hooks:
-    -   id: bandit
+      - id: bandit
         args: ["-r", "-lll"]
-
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.37
+    hooks:
+      - id: pymarkdown
+        args: [--disable-rules, md013, scan]
 # -   repo: https://github.com/pycqa/pylint
 #     rev: v3.0.1
 #     hooks:
