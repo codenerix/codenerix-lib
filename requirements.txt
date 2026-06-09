@@ -10,7 +10,7 @@ colorama==0.4.6
     # via -r requirements.in
 joblib==1.5.3
     # via nltk
-nltk==3.9.2
+nltk==3.9.4
     # via -r requirements.in
 pycryptodomex==3.23.0
     # via -r requirements.in
