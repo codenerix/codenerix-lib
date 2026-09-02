@@ -23,6 +23,8 @@ colorama==0.4.6
     #   tox
 coverage==7.14.1
     # via -r requirements-dev.in
+defusedxml==0.7.1
+    # via nltk
 distlib==0.4.2
     # via virtualenv
 filelock==3.29.1
@@ -38,7 +40,7 @@ joblib==1.5.3
     # via nltk
 mypy-extensions==1.1.0
     # via black
-nltk==3.9.4
+nltk==3.10.3
     # via -r requirements-dev.in
 nodeenv==1.10.0
     # via pre-commit
