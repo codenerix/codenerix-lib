@@ -8,9 +8,11 @@ click==8.4.1
     # via nltk
 colorama==0.4.6
     # via -r requirements.in
+defusedxml==0.7.1
+    # via nltk
 joblib==1.5.3
     # via nltk
-nltk==3.9.4
+nltk==3.10.3
     # via -r requirements.in
 pycryptodomex==3.23.0
     # via -r requirements.in
