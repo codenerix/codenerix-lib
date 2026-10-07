@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/codenerix-lib?color=blue)](https://pypi.org/project/codenerix-lib/)
 [![CI](https://github.com/codenerix/codenerix-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/codenerix/codenerix-lib/actions/workflows/ci.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=codenerix_codenerix-lib&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=codenerix_codenerix-lib)
 [![Coverage](https://codecov.io/gh/codenerix/codenerix-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/codenerix/codenerix-lib)
 [![Python versions](https://img.shields.io/pypi/pyversions/codenerix-lib)](https://pypi.org/project/codenerix-lib/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-yellow)](https://opensource.org/license/apache-2.0)
