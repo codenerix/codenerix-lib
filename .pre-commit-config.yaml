@@ -1,99 +1,100 @@
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
+# Pre-commit for codenerix-lib, aligned with django-codenerix:
+#   - ruff (lint + format) and uv-lock run from pinned mirrors
+#   - type-checkers and pymarkdown run via `uv run` so they resolve the
+#     project venv and all imports. Run `uv sync` once first.
+default_language_version:
+  python: python3.10
+
 repos:
+  # ==========================================================================
+  # Standard hooks
+  # ==========================================================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
       - id: check-merge-conflict
+      - id: check-toml
       - id: check-yaml
       - id: debug-statements
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/psf/black
-    rev: 25.12.0
+      - id: destroyed-symlinks
+      - id: detect-private-key
+
+  # ==========================================================================
+  # Ruff — replaces black, isort, flake8, pyupgrade, add-trailing-comma
+  # ==========================================================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.5
     hooks:
-      - id: black
-        args:
-          - --line-length=79
-          - --include='\.pyi?$'
-  - repo: https://github.com/PyCQA/isort
-    rev: 7.0.0
+      - id: ruff
+        name: ruff (lint)
+        args: [--fix]
+      - id: ruff-format
+        name: ruff (format)
+
+  # ==========================================================================
+  # uv — keep the lockfile in sync
+  # NOTE: rev must track the uv you actually run locally; an older hook would
+  # rewrite uv.lock in a stale format on every run.
+  # ==========================================================================
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.19
     hooks:
-      - id: isort
-        name: isort
-        args: [--profile, black, --line-length, "79"]
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v4.0.0
+      - id: uv-lock
+
+  # ==========================================================================
+  # Type-checkers and markdown via uv run (need the project venv)
+  # ==========================================================================
+  - repo: local
     hooks:
-      - id: add-trailing-comma
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
-    hooks:
-      - id: flake8
-        args:
-          - "--max-line-length=79"
-          - "--select=B,C,E,F,W,T4,B9"
-          - "--ignore=E203,W503"
-          # - "--max-complexity=18"
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.19.1"
-    hooks:
+      # Whole package, like CI: per-file mypy is unsound because inference
+      # crosses files.
       - id: mypy
-        additional_dependencies: [tokenize-rt==3.2.0, types-setuptools]
-        args: [--ignore-missing-imports]
-        # exclude: ^tests/
-        # args: [--python-version 3.10, --ignore-missing-imports, --disallow-untyped-defs]
-        # args: [--no-strict-optional, --ignore-missing-imports]
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
-    hooks:
-      - id: pyupgrade
-        args: [--keep-percent-format]
-  - repo: https://github.com/keewis/blackdoc
-    rev: v0.4.6
-    hooks:
-      - id: blackdoc
-        args: ["-l", "78"]
-        exclude: ^doc/.*
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
-    hooks:
-      - id: shellcheck
+        name: mypy
+        entry: uv run mypy codenerix_lib
+        language: system
+        files: ^codenerix_lib/.*\.py$
+        pass_filenames: false
+
+      - id: basedpyright
+        name: basedpyright
+        entry: uv run basedpyright codenerix_lib
+        language: system
+        files: ^codenerix_lib/.*\.py$
+        pass_filenames: false
+
+      - id: pymarkdown
+        name: pymarkdown
+        entry: uv run pymarkdown scan
+        language: system
+        types: [markdown]
+        require_serial: true
+
+  # ==========================================================================
+  # Misc
+  # ==========================================================================
   - repo: https://github.com/get-woke/woke
     rev: v0.19.0
     hooks:
       - id: woke-from-source
+
   - repo: https://github.com/PyCQA/bandit
     rev: 1.9.2
     hooks:
       - id: bandit
         args: ["-r", "-lll"]
-  - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.37
-    hooks:
-      - id: pymarkdown
-        args: [--disable-rules, md013, scan]
-# -   repo: https://github.com/pycqa/pylint
-#     rev: v3.0.1
-#     hooks:
-#     -   id: pylint
-#         args:
-#         - --max-line-length=80
-#         - --ignore-imports=yes
-#         - -d duplicate-code
 
 exclude: >
   (?x)(
       \.env
     | \.git
-    | \.ini
-    | \.log
     | \.tox
     | \.venv
-    | \.__pycache__
+    | __pycache__
     | _build
     | build
-    | dist"""
+    | dist
   )

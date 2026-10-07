@@ -1,50 +1,44 @@
-.PHONY: default
-default:
-	make test
+.PHONY: default cleancache lint stopwords test coverage coverage_html tox precommit
 
-.PHONY: test
-test:
-	(. ./venv/bin/activate && python -m pytest -s -vv tests)
+default: test
 
-.PHONY: coverage
-coverage:
-	-### Executing coverage...
-	(. ./venv/bin/activate && coverage run -m pytest tests)
+cleancache:
+	-# Clean cache...
+	@for d in __pycache__ .mypy_cache .pytest_cache .ruff_cache .cache .tox ; do \
+		find . -type d -name "$$d" -exec rm -rf {} +; \
+	done
 
-.PHONY: coverage_html
-coverage_html:
-	make coverage
-	-### Prepare coverage HTML report...
-	(. ./venv/bin/activate && coverage html)
-	open htmlcov/index.html 2>/dev/null 1>&2
+lint:
+	-# Lint and type checks, same commands as the CI workflow...
+	uv run ruff check .
+	uv run ruff format --check .
+	uv run mypy codenerix_lib
+	uv run basedpyright codenerix_lib
 
-.PHONY: tox
+stopwords:
+	@# The tests need the NLTK stopwords corpus; download it only when missing.
+	@# The downloader exits 0 even when the download fails, so find() decides.
+	@uv run python -c "import nltk; nltk.data.find('corpora/stopwords')" 2>/dev/null || { \
+		uv run python -m nltk.downloader -q stopwords && \
+		uv run python -c "import nltk; nltk.data.find('corpora/stopwords')"; }
+
+test: stopwords
+	-# Run tests...
+	uv run python -m pytest
+
+coverage: stopwords
+	-# Executing coverage...
+	uv run coverage run -m pytest
+	uv run coverage report -m
+
+coverage_html: coverage
+	-# Prepare coverage HTML report...
+	uv run coverage html
+	xdg-open htmlcov/index.html 2>/dev/null 1>&2 || true
+
 tox:
-	(. ./venv/bin/activate && python -m tox)
+	-# Run tests in all environments...
+	uv run tox
 
-.PHONY: prepare
-prepare:
-	sudo apt-get -y install python3-pip python3-virtualenv
-
-.PHONY: venv
-venv:
-	test ! -f venv && virtualenv -p python3 venv || true
-	(. ./venv/bin/activate && pip install -r requirements-dev.txt)
-	(. ./venv/bin/activate && python -m nltk.downloader -q stopwords)
-# The downloader exits 0 even on failure; this check does not
-	(. ./venv/bin/activate && python -c "import nltk; nltk.data.find('corpora/stopwords')")
-
-.PHONY: requirements
-requirements:
-	-@rm -f requirements*.txt
-	@(. ./venv/bin/activate && pip-compile --resolver=backtracking requirements.in)
-	@(. ./venv/bin/activate && pip-compile --resolver=backtracking requirements-dev.in)
-	(. ./venv/bin/activate && pip-sync requirements*.txt)
-
-.PHONY: deps
-deps:
-	python3 -c 'import pathlib, pkg_resources; requirements_txt=pathlib.Path("requirements.txt").open(); install_requires = [str(requirement) for requirement in pkg_resources.parse_requirements(requirements_txt)]; requirements_txt.close(); print(install_requires)'
-
-.PHONY: precommit
 precommit:
-	pre-commit run -a
+	uv run pre-commit run -a

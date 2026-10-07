@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-10-07
 ### Changed
  - `codenerix_lib.normalizers` no longer downloads the NLTK `stopwords` corpus by itself. Importing the module never touches the network; the corpus is loaded on the first `strong_normalizer()` call, which raises `MissingStopwordsError` (a `LookupError`) with the install command when it is missing. Install it once per machine with `python -m nltk.downloader stopwords`. nltk 3.10 refuses downloads through HTTP proxies by default, so the automatic download could fail at import time.
+ - Packaging moved from `setup.py` + pip-tools to `pyproject.toml` (hatchling) + `uv.lock`, aligned with django-codenerix. The distribution metadata is unchanged apart from the license, now declared as the SPDX expression `Apache-2.0`, and the added Python 3.14 and `Typing :: Typed` classifiers.
 
 ## [1.0.32] - 2025-12-17
 ### Changed

@@ -75,7 +75,13 @@ celerybeat-schedule
 
 # virtualenv
 venv/
+.venv/
 ENV/
+
+# Tool caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
 
 # Spyder project settings
 .spyderproject
