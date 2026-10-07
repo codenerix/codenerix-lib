@@ -19,6 +19,15 @@ Codenerix LIB is a base module of libraries used by [CODENERIX](https://www.code
    pip install codenerix-lib
    ```
 
-2. Since Codenerix LIB is a library, you only need to import its parts into your project and use them.
+2. If you use `codenerix_lib.normalizers`, install the NLTK stopwords corpus once per machine (it is not downloaded automatically):
+
+   ```bash
+   python -m nltk.downloader stopwords
+   python -c "import nltk; nltk.data.find('corpora/stopwords'); print('ok')"
+   ```
+
+   The downloader exits successfully even when the download fails, so use the second command to check it. Behind an HTTP proxy, nltk 3.10 or later refuses to download unless `NLTK_ALLOW_PROXIED_URLOPEN=1` is set.
+
+3. Since Codenerix LIB is a library, you only need to import its parts into your project and use them.
 
 [Contact with us](https://codenerix.com/contact/).

@@ -51,6 +51,7 @@ packaging==26.2
     #   pyproject-api
     #   pytest
     #   tox
+    #   tox-uv-bare
     #   wheel
 pathspec==1.1.1
     # via black
@@ -105,11 +106,19 @@ textnorm==1.2
 tomli-w==1.2.0
     # via tox
 tox==4.55.1
+    # via
+    #   -r requirements-dev.in
+    #   tox-uv-bare
+tox-uv==1.36.1
     # via -r requirements-dev.in
+tox-uv-bare==1.36.1
+    # via tox-uv
 tqdm==4.68.1
     # via nltk
 unidecode==1.4.0
     # via -r requirements-dev.in
+uv==0.12.23
+    # via tox-uv
 virtualenv==21.7.13
     # via
     #   pre-commit

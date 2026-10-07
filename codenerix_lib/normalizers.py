@@ -1,17 +1,29 @@
+import functools
 import re
 
-import nltk
 import textnorm
 import unidecode
 from nltk.corpus import stopwords
 
-# Import nltk for stopwords
+STOPWORDS_INSTALL_HINT = (
+    "NLTK 'stopwords' corpus not found. Install it once with:\n"
+    "    python -m nltk.downloader stopwords\n"
+    "(or set NLTK_DATA to a directory that contains it)"
+)
 
-try:
-    stop_words = set(stopwords.words("english"))
-except LookupError:  # pragma: no cover
-    nltk.download("stopwords", quiet=True)
-    stop_words = set(stopwords.words("english"))
+
+class MissingStopwordsError(LookupError):
+    """The NLTK 'stopwords' corpus is not installed."""
+
+
+@functools.cache
+def _stop_words() -> frozenset[str]:
+    # Loaded on first use, never downloaded: importing this module must not
+    # touch the network (nltk>=3.10 also refuses downloads through proxies)
+    try:
+        return frozenset(stopwords.words("english"))
+    except LookupError as error:
+        raise MissingStopwordsError(STOPWORDS_INSTALL_HINT) from error
 
 
 def strong_normalizer(
@@ -72,6 +84,7 @@ def strong_normalizer(
     lst_string = [string][0].split()
 
     # Remove stopwords
+    stop_words = _stop_words()
     clean_string = ""
     for i in lst_string:
         if i not in stop_words:

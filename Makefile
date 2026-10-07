@@ -30,6 +30,9 @@ prepare:
 venv:
 	test ! -f venv && virtualenv -p python3 venv || true
 	(. ./venv/bin/activate && pip install -r requirements-dev.txt)
+	(. ./venv/bin/activate && python -m nltk.downloader -q stopwords)
+# The downloader exits 0 even on failure; this check does not
+	(. ./venv/bin/activate && python -c "import nltk; nltk.data.find('corpora/stopwords')")
 
 .PHONY: requirements
 requirements:

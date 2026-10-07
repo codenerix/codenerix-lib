@@ -12,3 +12,4 @@ pbr
 pip-tools
 pre-commit
 coverage
+tox-uv
