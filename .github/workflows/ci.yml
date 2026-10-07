@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# Cancel older runs of the same ref when a new one arrives
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Sync (dev)
+        run: uv sync
+      - name: ruff check
+        run: uv run ruff check .
+      - name: ruff format --check
+        run: uv run ruff format --check .
+
+  types:
+    name: Type check (mypy + basedpyright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Sync (dev)
+        run: uv sync
+      - name: mypy
+        run: uv run mypy codenerix_lib
+      - name: basedpyright
+        run: uv run basedpyright codenerix_lib
+
+  test:
+    name: Tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Sync (dev)
+        run: uv sync --python ${{ matrix.python-version }}
+      - name: NLTK stopwords corpus
+        run: make stopwords
+      - name: pytest (with coverage)
+        run: uv run coverage run -m pytest
+      # Coverage gate and upload from a single interpreter, like the old tox
+      # `coverage` env and the old workflow's Codecov step
+      - name: Coverage report
+        if: matrix.python-version == '3.12'
+        run: |
+          uv run coverage report -m --skip-covered --fail-under=90
+          uv run coverage xml
+      # v3 (the old workflow's) runs on a Node version Actions no longer supports.
+      # Public repos can upload without a token if the Codecov org allows it;
+      # otherwise add a CODECOV_TOKEN secret. Never blocks CI.
+      - name: Codecov
+        if: matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: false
