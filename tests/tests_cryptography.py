@@ -109,7 +109,4 @@ def test_aes_binary(mocker, raw, key, iv, encrypted, encrypted_binary):
     assert result_encrypted_with_iv == encrypted_binary
 
     # Decrypt with IV
-    assert (
-        aes.decrypt(encrypted_binary, key, b64encoded=False)
-        == b"Hola caracola"
-    )
+    assert aes.decrypt(encrypted_binary, key, b64encoded=False) == b"Hola caracola"

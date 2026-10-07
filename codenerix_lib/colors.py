@@ -20,6 +20,7 @@
 """
 Colors definition
 """
+
 from colorama import init
 
 init()
@@ -85,9 +86,9 @@ def colorize(msg, color=None):
         (darkbit, subcolor) = (1, 0)
 
     # Prepare the message
-    result = "\033[%1d;%02dm" % (darkbit, subcolor)
+    result = f"\033[{darkbit:1d};{subcolor:02d}m"
     result += msg
-    result += "\033[%1d;%02dm" % (1, 0)
+    result += "\033[1;00m"
 
     # Return the result
     return result

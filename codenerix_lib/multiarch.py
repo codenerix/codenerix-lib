@@ -43,9 +43,9 @@ def multiarch_import(name, sufix=None, using=False):
     if sufix:
         # Use it as expected
         try:
-            imported = __import__("{}{}".format(name, sufix))
+            imported = __import__(f"{name}{sufix}")
             if using:  # pragma: no cover
-                d.debug("Using {}{}".format(name, sufix), color="cyan")
+                d.debug(f"Using {name}{sufix}", color="cyan")
         except Exception:
             d.warning(
                 f"I have tried to import the library '{name}' as you "

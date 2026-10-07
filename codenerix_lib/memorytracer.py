@@ -43,7 +43,7 @@ class MemoryTracer(Debugger):
 
         if onscreen:  # pragma: no cover
             self.debug(
-                "Memory Tracer top {} lines:".format(limit),
+                f"Memory Tracer top {limit} lines:",
                 color="blue",
             )
         for index, stat in enumerate(top_stats[:limit], 1):
@@ -71,12 +71,7 @@ class MemoryTracer(Debugger):
             }
             if onscreen:  # pragma: no cover
                 self.debug(
-                    "#{}: {}:{}: {:.1f} KiB".format(
-                        index,
-                        filename,
-                        frame.lineno,
-                        stat.size / 1024,
-                    ),
+                    f"#{index}: {filename}:{frame.lineno}: {stat.size / 1024:.1f} KiB",
                     color=color,
                 )
 
@@ -85,7 +80,7 @@ class MemoryTracer(Debugger):
             if line:
                 token["line"] = line
                 if onscreen:  # pragma: no cover
-                    self.debug("    {}".format(line), color="white")
+                    self.debug(f"    {line}", color="white")
 
             answer["top"].append(token)
 
@@ -96,7 +91,7 @@ class MemoryTracer(Debugger):
             answer["otherkb"] = float(size) / 1024.0
             if onscreen:  # pragma: no cover
                 self.debug(
-                    "{} other: {:.1f} KiB".format(len(other), size / 1024),
+                    f"{len(other)} other: {size / 1024:.1f} KiB",
                     color="purple",
                 )
         total = sum(stat.size for stat in top_stats)
@@ -104,7 +99,7 @@ class MemoryTracer(Debugger):
         answer["totalkb"] = float(total) / 1024.0
         if onscreen:  # pragma: no cover
             self.debug(
-                "Total allocated size: {:.1f} KiB".format(total / 1024),
+                f"Total allocated size: {total / 1024:.1f} KiB",
                 color="green",
             )
 

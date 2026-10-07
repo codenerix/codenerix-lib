@@ -6,7 +6,7 @@ from codenerix_lib.timeout import TimedOutException, timeout, timeout2
 
 
 def slow(num):
-    for i in range(num):
+    for _ in range(num):
         time.sleep(0.1)
 
 

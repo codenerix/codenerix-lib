@@ -63,46 +63,29 @@ def test_debugger(capsys, mocker):
     # Blue color
     debugger.debug("Hola", color="blue")
     cap = capsys.readouterr()
-    assert (
-        cap.out
-        == "\x1b[1;34m31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
-    )
+    assert cap.out == "\x1b[1;34m31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
 
     # Primary
     debugger.primary("Hola")
     cap = capsys.readouterr()
-    assert (
-        cap.out
-        == "\x1b[1;34m\nPRIMARY - 31/12/2020 12:13:14 TEST            - "
-        "Hola\x1b[1;00m\n"
-    )
+    assert cap.out == "\x1b[1;34m\nPRIMARY - 31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
 
     # Secondary
     debugger.secondary("Hola")
     cap = capsys.readouterr()
     assert (
-        cap.out
-        == "\x1b[1;35m\nSECONDARY - 31/12/2020 12:13:14 TEST            - "
-        "Hola\x1b[1;00m\n"
+        cap.out == "\x1b[1;35m\nSECONDARY - 31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
     )
 
     # Success
     debugger.success("Hola")
     cap = capsys.readouterr()
-    assert (
-        cap.out
-        == "\x1b[1;32m\nSUCCESS - 31/12/2020 12:13:14 TEST            - "
-        "Hola\x1b[1;00m\n"
-    )
+    assert cap.out == "\x1b[1;32m\nSUCCESS - 31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
 
     # Danger
     debugger.danger("Hola")
     cap = capsys.readouterr()
-    assert (
-        cap.out
-        == "\x1b[0;31m\nDANGER - 31/12/2020 12:13:14 TEST            - "
-        "Hola\x1b[1;00m\n"
-    )
+    assert cap.out == "\x1b[0;31m\nDANGER - 31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
 
     # Warning
     line = lineno() + 1
@@ -117,10 +100,7 @@ def test_debugger(capsys, mocker):
     # Info
     debugger.info("Hola")
     cap = capsys.readouterr()
-    assert (
-        cap.out == "\x1b[1;36m\nINFO - 31/12/2020 12:13:14 TEST            - "
-        "Hola\x1b[1;00m\n"
-    )
+    assert cap.out == "\x1b[1;36m\nINFO - 31/12/2020 12:13:14 TEST            - Hola\x1b[1;00m\n"
 
     # Error
     line = lineno() + 1

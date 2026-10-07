@@ -94,14 +94,15 @@ def timeout(f, timeout, *args, **kwargs):
 
 
 class ThreadedCMD(threading.Thread):
-    def __init__(self, result, f, args=(), kwargs={}):
+    def __init__(self, result, f, args=(), kwargs=None):
         # Initialice thread
         super().__init__()
 
         # Save incoming data
         self.__f = f
         self.__args = args
-        self.__kwargs = kwargs
+        # None instead of a shared {} default; kwargs is never mutated here
+        self.__kwargs = kwargs if kwargs is not None else {}
         self.__result = result
 
         # Save exceptions if any
@@ -146,7 +147,7 @@ def terminate_thread(thread):  # pragma: no cover
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs={}):
+def timeout2(f, timeout, quit=None, reactivity=0.1, args=(), kwargs=None):
     """
     Function that controls the timeout of another function using only threads
 

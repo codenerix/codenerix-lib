@@ -19,6 +19,8 @@ repos:
       - id: check-yaml
       - id: debug-statements
       - id: end-of-file-fixer
+        # basedpyright rewrites its baseline without a trailing newline
+        exclude: ^\.basedpyright/
       - id: trailing-whitespace
       - id: destroyed-symlinks
       - id: detect-private-key

@@ -19,11 +19,12 @@
 """
 Debugger helps to debug the system
 """
+
 from datetime import datetime
 from inspect import currentframe
 from os import getcwd
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TextIO, Tuple, Union
+from typing import Any, TextIO
 
 from codenerix_lib.colors import colors, html_colors
 
@@ -57,7 +58,7 @@ def __FILE__():  # noqa: N802,N807
 
 
 class Debugger:
-    __indebug: Dict[str, Tuple[Union[str, Path, TextIO], List[str]]] = {}
+    __indebug: dict[str, tuple[str | Path | TextIO, list[str]]] = {}
     __inname = None
 
     KINDS = [
@@ -85,7 +86,7 @@ class Debugger:
 
     def set_debug(
         self,
-        debug: Optional[Dict[str, Any]] = None,
+        debug: dict[str, Any] | None = None,
     ):
         self.__html = None
         self.__html_bgcolor = None
@@ -196,11 +197,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
 
         # Allow better names for debug calls
@@ -247,9 +244,7 @@ class Debugger:
                         handlerbuf = handler
 
                     # Look up if the name of the class is inside indebug
-                    if (clname in indebug) or (
-                        ("*" in indebug) and ("-%s" % (clname) not in indebug)
-                    ):
+                    if (clname in indebug) or (("*" in indebug) and (f"-{clname}" not in indebug)):
                         # Set line head name
                         if self.__inname:
                             headname = self.__inname
@@ -269,12 +264,8 @@ class Debugger:
                                 f"{now.second:02d} "
                             )
                             if origin:
-                                message += (
-                                    str(filename) + ":" + str(line) + ": "
-                                )
-                            message += (
-                                f"{headname:<15s}" + " - " + str(tabular)
-                            )
+                                message += str(filename) + ":" + str(line) + ": "
+                            message += f"{headname:<15s}" + " - " + str(tabular)
 
                         if msg:
                             try:
@@ -317,11 +308,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -353,11 +340,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -389,11 +372,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -425,11 +404,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -461,11 +436,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -497,11 +468,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -533,11 +500,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -572,11 +535,7 @@ class Debugger:
                 getcwd(),
                 ".",
             )
-            if (
-                len(filename) >= 2
-                and filename[0] == "."
-                and filename[1] == "/"
-            ):
+            if len(filename) >= 2 and filename[0] == "." and filename[1] == "/":
                 filename = filename[2:]
         else:
             line = None
@@ -647,14 +606,9 @@ class Debugger:
                             headname = clname
 
                         now = datetime.now()
-                        message += "\n%s - %02d/%02d/%d %02d:%02d:%02d " % (
-                            prefix,
-                            now.day,
-                            now.month,
-                            now.year,
-                            now.hour,
-                            now.minute,
-                            now.second,
+                        message += (
+                            f"\n{prefix} - {now.day:02d}/{now.month:02d}/{now.year:d} "
+                            f"{now.hour:02d}:{now.minute:02d}:{now.second:02d} "
                         )
                         if filename or line:
                             message += str(filename) + ":" + str(line) + ": "
