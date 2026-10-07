@@ -89,8 +89,12 @@ repos:
       - id: bandit
         args: ["-r", "-lll"]
 
+# pre-commit uses re.search, so each name is anchored to whole path segments;
+# a bare `\.git` also matched `.github/` and `.gitignore`, and `dist`/`build`
+# would match any path containing those words
 exclude: >
-  (?x)(
+  (?x)
+  (^|/)(
       \.env
     | \.git
     | \.tox
@@ -99,4 +103,4 @@ exclude: >
     | _build
     | build
     | dist
-  )
+  )(/|$)
