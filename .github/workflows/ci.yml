@@ -10,6 +10,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Every uv call must match uv.lock, including the ones inside `make` targets
+env:
+  UV_LOCKED: "1"
+
 jobs:
   lint:
     name: Lint (ruff)
@@ -17,17 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         # One cache key per job: they all ran on the same system Python, raced
         # to save a single key and logged "Unable to reserve cache"
         with:
           cache-suffix: lint
       - name: Sync (dev)
-        run: uv sync
+        run: uv sync --locked
       - name: ruff check
-        run: uv run ruff check .
+        run: uv run --locked ruff check .
       - name: ruff format --check
-        run: uv run ruff format --check .
+        run: uv run --locked ruff format --check .
 
   types:
     name: Type check (mypy + basedpyright)
@@ -35,15 +39,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           cache-suffix: types
       - name: Sync (dev)
-        run: uv sync
+        run: uv sync --locked
       - name: mypy
-        run: uv run mypy codenerix_lib
+        run: uv run --locked mypy codenerix_lib
       - name: basedpyright
-        run: uv run basedpyright codenerix_lib
+        run: uv run --locked basedpyright codenerix_lib
 
   test:
     name: Tests (py${{ matrix.python-version }})
@@ -55,28 +59,28 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           cache-suffix: py${{ matrix.python-version }}
       - name: Sync (dev)
-        run: uv sync --python ${{ matrix.python-version }}
+        run: uv sync --locked --python ${{ matrix.python-version }}
       - name: NLTK stopwords corpus
         run: make stopwords
       - name: pytest (with coverage)
-        run: uv run coverage run -m pytest
+        run: uv run --locked coverage run -m pytest
       # Coverage gate and upload from a single interpreter, like the old tox
       # `coverage` env and the old workflow's Codecov step
       - name: Coverage report
         if: matrix.python-version == '3.12'
         run: |
-          uv run coverage report -m --skip-covered --fail-under=90
-          uv run coverage xml
+          uv run --locked coverage report -m --skip-covered --fail-under=90
+          uv run --locked coverage xml
       # v6: v5 still pulls actions/github-script on Node 20.
       # Public repos can upload without a token if the Codecov org allows it;
       # otherwise add a CODECOV_TOKEN secret. Never blocks CI.
       - name: Codecov
         if: matrix.python-version == '3.12'
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6.0.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml

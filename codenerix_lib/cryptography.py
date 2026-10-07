@@ -37,6 +37,10 @@ from Cryptodome.Cipher import AES
 class AESCipher:
     """
     Adapted solution from: https://stackoverflow.com/a/21928790/1481040
+
+    AES-CBC without a MAC: ciphertexts are not authenticated, so do not decrypt
+    attacker-supplied data where decryption errors are observable. Kept as is
+    for compatibility with data already encrypted with it.
     """
 
     def __init__(self):
