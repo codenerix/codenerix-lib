@@ -59,7 +59,6 @@ pip-tools==7.5.3
 platformdirs==4.10.0
     # via
     #   black
-    #   python-discovery
     #   tox
     #   virtualenv
 pluggy==1.6.0
@@ -87,7 +86,7 @@ pytest-mock==3.15.1
     # via -r requirements-dev.in
 pytest-sugar==1.1.1
     # via -r requirements-dev.in
-python-discovery==1.4.0
+python-discovery==1.6.1
     # via
     #   tox
     #   virtualenv
@@ -109,7 +108,7 @@ tqdm==4.68.1
     # via nltk
 unidecode==1.4.0
     # via -r requirements-dev.in
-virtualenv==21.4.2
+virtualenv==21.7.13
     # via
     #   pre-commit
     #   tox
