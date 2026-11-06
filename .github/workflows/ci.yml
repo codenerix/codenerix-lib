@@ -14,6 +14,11 @@ concurrency:
 env:
   UV_LOCKED: "1"
 
+# Nothing is built in CI: every dependency ships a wheel, and the project itself
+# is imported from the checkout, so "Sync (dev)" runs with --no-build
+# --no-install-project and the tools run with --no-sync --no-build. No setup
+# script of a third-party sdist ever runs here.
+
 jobs:
   lint:
     name: Lint (ruff)
@@ -27,11 +32,11 @@ jobs:
         with:
           cache-suffix: lint
       - name: Sync (dev)
-        run: uv sync --locked
+        run: uv sync --locked --no-build --no-install-project
       - name: ruff check
-        run: uv run --locked ruff check .
+        run: uv run --no-sync --no-build ruff check .
       - name: ruff format --check
-        run: uv run --locked ruff format --check .
+        run: uv run --no-sync --no-build ruff format --check .
 
   types:
     name: Type check (mypy + basedpyright)
@@ -43,11 +48,11 @@ jobs:
         with:
           cache-suffix: types
       - name: Sync (dev)
-        run: uv sync --locked
+        run: uv sync --locked --no-build --no-install-project
       - name: mypy
-        run: uv run --locked mypy codenerix_lib
+        run: uv run --no-sync --no-build mypy codenerix_lib
       - name: basedpyright
-        run: uv run --locked basedpyright codenerix_lib
+        run: uv run --no-sync --no-build basedpyright codenerix_lib
 
   test:
     name: Tests (py${{ matrix.python-version }})
@@ -63,18 +68,21 @@ jobs:
         with:
           cache-suffix: py${{ matrix.python-version }}
       - name: Sync (dev)
-        run: uv sync --locked --python ${{ matrix.python-version }}
+        run: uv sync --locked --no-build --no-install-project --python ${{ matrix.python-version }}
       - name: NLTK stopwords corpus
+        # The Makefile's bare `uv run` would sync and build the project
+        env:
+          UV_NO_SYNC: "1"
         run: make stopwords
       - name: pytest (with coverage)
-        run: uv run --locked coverage run -m pytest
+        run: uv run --no-sync --no-build coverage run -m pytest
       # Coverage gate and upload from a single interpreter, like the old tox
       # `coverage` env and the old workflow's Codecov step
       - name: Coverage report
         if: matrix.python-version == '3.12'
         run: |
-          uv run --locked coverage report -m --skip-covered --fail-under=90
-          uv run --locked coverage xml
+          uv run --no-sync --no-build coverage report -m --skip-covered --fail-under=90
+          uv run --no-sync --no-build coverage xml
       # v6: v5 still pulls actions/github-script on Node 20.
       # Public repos can upload without a token if the Codecov org allows it;
       # otherwise add a CODECOV_TOKEN secret. Never blocks CI.
